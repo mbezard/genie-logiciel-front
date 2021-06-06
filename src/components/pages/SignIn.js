@@ -38,7 +38,7 @@ export default function SignIn() {
         <Text>
             Pas encore de Compte ?
         </Text>
-        <Link to="/signOut">
+        <Link to="/signOut" underlayColor="#f0f4f7">
             <Text style = {styles.signOutText}>
                 Identifiez-vous
             </Text>
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
         height:40,
         paddingLeft:10,
         width:"75%",
+        marginVertical: 2,
     },
     submitButton:{
         marginTop: 20,
