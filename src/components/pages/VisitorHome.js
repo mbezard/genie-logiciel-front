@@ -19,13 +19,11 @@ export default function VisitorHome(){
         <View style={styles.choiceContainer}>
             
             <Text>Aucun Compte :</Text>
-            <View>
-                <Link to="/profile"  >
+                <Link to="/profile"  underlayColor="none" style={styles.buttonLink}>
                     
                     <Button title="S'inscrire"  color="orange"/>
                     
                 </Link>
-            </View>
            <View>
            
            </View>
