@@ -4,11 +4,14 @@ import axios from "axios";
 import userReducer from "./user/userReducer";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getUserInfos} from "./user/userActions";
+import {composeWithDevTools} from "redux-devtools-extension";
 
 const store = createStore(combineReducers({
     user: userReducer,
 }),undefined,
-    applyMiddleware(thunk)
+    composeWithDevTools(
+        applyMiddleware(thunk)
+    )
 );
 
 AsyncStorage.getItem("authJwtToken").then(data => {
