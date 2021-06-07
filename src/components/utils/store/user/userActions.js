@@ -16,10 +16,12 @@ export const setUser = (user) => ({
 
 export const loginAttempt = (username, password) => {
     const data = new FormData();
-    data.set("username", username);
-    data.set("password", password);
+    data.append("username", username);
+    data.append("password", password);
 
+    console.log("data", data)
     return dispatch => {
+        console.log('inside dispatch')
         dispatch({
             type: LOGIN_USER_ATTEMPT_ACTION
         });
@@ -32,7 +34,7 @@ export const loginAttempt = (username, password) => {
                 AsyncStorage.setItem('authJwtToken', token)
                 dispatch(getUserInfos());
             }
-        )
+        ).catch(reason => console.log("error while loging in", JSON.stringify(reason)))
     }
 }
 

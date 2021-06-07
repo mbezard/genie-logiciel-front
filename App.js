@@ -20,32 +20,43 @@ export default function App() {
                             <View style={styles.mainView}>
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/map" component={WanderMap}/>
+                                <Route path="/signUp" component={SignUp}/>
+                                <Route path="/signIn" component={SignIn}/>
+                                <Route path="/visitorHome" component={VisitorHome}/>
                                 <Route path="/profile" component={Profile}/>
                             </View>
+
                             {/* Header : */}
                             <View style={styles.navbar}>
                                 <Link to="/" underlayColor="#f0f4f7">
                                     <Text style={styles.navItem}>Home</Text>
                                 </Link>
+
                                 <Link to="/map" underlayColor="#f0f4f7">
                                     <Text style={styles.navItem}>Map</Text>
                                 </Link>
+
                                 <Link to="/profile" underlayColor="#f0f4f7">
                                     <Text style={styles.navItem}>Profile</Text>
                                 </Link>
 
-                        </Link>
-                            <Text style={styles.navItem}>SignUp</Text>
-                        <Link to="/signUp" underlayColor="#f0f4f7">
-                        </Link>
-                            <Text style={styles.navItem}>SignIn</Text>
-                        <Link to="/signIn" underlayColor="#f0f4f7">
-                        </Link>
-                            <Text style={styles.navItem}>Home</Text>
-                        <Link to="/visitorHome" underlayColor="#f0f4f7">
-                    </View>
+
+                                <Link to="/signUp" underlayColor="#f0f4f7">
+                                    <Text style={styles.navItem}>SignUp</Text>
+                                </Link>
+
+                                <Link to="/signIn" underlayColor="#f0f4f7">
+                                    <Text style={styles.navItem}>SignIn</Text>
+                                </Link>
+
+                                <Link to="/visitorHome" underlayColor="#f0f4f7">
+                                    <Text style={styles.navItem}>Home</Text>
+                                </Link>
+
+                            </View>
 
                         </View>
+
                     </NativeRouter>
 
                 </SafeAreaView>

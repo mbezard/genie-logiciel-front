@@ -8,7 +8,7 @@ export default function SignUp(){
     const [confirmPass, setConfirmPass] = useState("")
 
     function submit() {
-        console.log("submit")
+        console.log("submit", email, pass, confirmPass)
     }
 
     return(<View style={styles.mainContainer}>

@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import { Text, View, Button, TextInput, StyleSheet, TouchableHighlight } from "react-native";
-import { Link } from "react-router-native";
+import React from "react";
+import {Text, View, Button, StyleSheet} from "react-native";
+import {Link} from "react-router-native";
 
-export default function VisitorHome(){
-    return(<View style={styles.mainContainer}>
+export default function VisitorHome() {
+    return (<View style={styles.mainContainer}>
         <Text style={styles.titleText}>
             Bienvenue sur Wander !
         </Text>
@@ -17,47 +17,45 @@ export default function VisitorHome(){
             </Link>
         </View>
         <View style={styles.choiceContainer}>
-            
+
             <Text>Aucun Compte :</Text>
-                <Link to="/profile"  underlayColor="none" style={styles.buttonLink}>
-                    
-                    <Button title="S'inscrire"  color="orange"/>
-                    
-                </Link>
-           <View>
-           
-           </View>
+            <Link to="/profile" underlayColor="none" style={styles.buttonLink}>
+
+                <Button title="S'inscrire" color="orange"/>
+
+            </Link>
+            <View>
+
+            </View>
         </View>
-        
+
     </View>)
 }
 
 const styles = StyleSheet.create({
-    mainContainer:{
-        flex:1,
-        justifyContent:"center",
+    mainContainer: {
+        flex: 1,
+        justifyContent: "center",
         alignItems: "center",
-        width:"100%",
+        width: "100%",
     },
-    titleText:{
+    titleText: {
         fontSize: 32,
     },
-    subtitle:{
-        fontSize:18,
+    subtitle: {
+        fontSize: 18,
         marginBottom: 70,
     },
-    buttonLink:{
-        marginTop:5,
+    buttonLink: {
+        marginTop: 5,
         width: "100%"
     },
-    button:{
-
-    },
-    choiceContainer:{
-        marginVertical:10,
+    button: {},
+    choiceContainer: {
+        marginVertical: 10,
         width: "40%",
     },
-    highlightView:{
+    highlightView: {
         alignItems: "center",
         backgroundColor: "#DDDDDD",
         padding: 10

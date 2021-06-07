@@ -1,13 +1,21 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import { Text, View, Button, TextInput, StyleSheet } from "react-native";
 import { Link } from "react-router-native";
+import {useDispatch} from "react-redux";
+import {loginAttempt} from "../utils/store/user/userActions";
 
 export default function SignIn() {
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
+    const dispatch = useDispatch()
+
+    const logUser = useCallback((username, password) => {
+        dispatch(loginAttempt(username, password))
+    }, [dispatch])
 
     function submit() {
-        console.log("submit")
+        console.log("submit", email, pass)
+        logUser(email, pass)
     }
 
     return (<View style={styles.mainContainer}>
@@ -34,7 +42,7 @@ export default function SignIn() {
                 color="orange"
             />
         </View>
-        
+
 
         <Text>
             Pas encore de Compte ?
@@ -46,7 +54,7 @@ export default function SignIn() {
         </Link>
     </View>)
 
-    
+
 }
 
 const styles = StyleSheet.create({
