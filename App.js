@@ -4,7 +4,7 @@ import {Link, NativeRouter, Route} from "react-router-native";
 import Home from "./src/components/pages/Home";
 import Profile from "./src/components/pages/Profile";
 import SignIn from './src/components/pages/SignIn';
-import SignOut from './src/components/pages/SignOut';
+import SignUp from './src/components/pages/SignUp';
 import VisitorHome from './src/components/pages/VisitorHome';
 import WanderMap from "./src/components/pages/WanderMap";
 import {padding} from "./src/components/utils/utils";
@@ -20,7 +20,7 @@ export default function App() {
                     <Route path="/profile" component={Profile}/>
                     <Route path="/visitorHome" component={VisitorHome}/>
                     <Route path="/signIn" component={SignIn}/>
-                    <Route path="/signOut" component={SignOut}/>
+                    <Route path="/signUp" component={SignUp}/>
                     </View>
                     {/* Header : */}
                     <View style={styles.navbar}>
