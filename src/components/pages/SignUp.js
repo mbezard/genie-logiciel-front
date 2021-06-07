@@ -3,9 +3,9 @@ import { Text, View, Button, TextInput, StyleSheet } from "react-native";
 import { Link } from "react-router-native";
 
 export default function SignUp(){
-    const [email, setEmail] = useState("")
-    const [pass, setPass] = useState("")
-    const [confirmPass, setConfirmPass] = useState("")
+    const [email, setEmail] = useState("");
+    const [pass, setPass] = useState("");
+    const [confirmPass, setConfirmPass] = useState("");
 
     function submit() {
         console.log("submit")
@@ -31,8 +31,8 @@ export default function SignUp(){
         <TextInput
             style={styles.input}
             autoCompleteType="password"
-            onChangeText={setPass}
-            value={pass}
+            onChangeText={setConfirmPass}
+            value={confirmPass}
             placeholder="Confirmer le Mot de passe"
             secureTextEntry={true}
         />
