@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { Text, View, Button, TextInput, StyleSheet } from "react-native";
 import { Link } from "react-router-native";
 
-export default function SignOut(){
+export default function SignUp(){
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
     const [confirmPass, setConfirmPass] = useState("")
@@ -12,6 +12,7 @@ export default function SignOut(){
     }
 
     return(<View style={styles.mainContainer}>
+        <Text style={styles.title}>Inscription</Text>
         <TextInput
             style={styles.input}
             autoCompleteType="email"
@@ -61,7 +62,10 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         alignItems: "center",
         width:"100%",
-        borderWidth:1
+    },
+    title:{
+        fontSize:36,
+        marginBottom:40,
     },
     input:{
         borderWidth: 1,

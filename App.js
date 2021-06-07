@@ -3,6 +3,9 @@ import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {Link, NativeRouter, Route} from "react-router-native";
 import Home from "./src/components/pages/Home";
 import Profile from "./src/components/pages/Profile";
+import SignIn from './src/components/pages/SignIn';
+import SignUp from './src/components/pages/SignUp';
+import VisitorHome from './src/components/pages/VisitorHome';
 import WanderMap from "./src/components/pages/WanderMap";
 import {padding} from "./src/components/utils/utils";
 import {Provider} from "react-redux";
@@ -31,7 +34,16 @@ export default function App() {
                                     <Text style={styles.navItem}>Profile</Text>
                                 </Link>
 
-                            </View>
+                        </Link>
+                            <Text style={styles.navItem}>SignUp</Text>
+                        <Link to="/signUp" underlayColor="#f0f4f7">
+                        </Link>
+                            <Text style={styles.navItem}>SignIn</Text>
+                        <Link to="/signIn" underlayColor="#f0f4f7">
+                        </Link>
+                            <Text style={styles.navItem}>Home</Text>
+                        <Link to="/visitorHome" underlayColor="#f0f4f7">
+                    </View>
 
                         </View>
                     </NativeRouter>
