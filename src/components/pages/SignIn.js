@@ -3,8 +3,9 @@ import { Text, View, Button, TextInput, StyleSheet } from "react-native";
 import { Link } from "react-router-native";
 
 export default function SignIn() {
-    const [email, setEmail] = useState("")
-    const [pass, setPass] = useState("")
+    const [email, setEmail] = useState("");
+    const [pass, setPass] = useState("");
+    const [error, errorText] = useState("");
 
     function submit() {
         console.log("submit")
@@ -27,6 +28,11 @@ export default function SignIn() {
             placeholder="Mot de passe"
             secureTextEntry={true}
         />
+        <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+                {error}
+            </Text>
+        </View>
         <View style={styles.submitButton}>
             <Button
                 title="Se connecter"
@@ -69,11 +75,19 @@ const styles = StyleSheet.create({
         marginVertical: 2,
     },
     submitButton:{
-        marginTop: 20,
+        
         marginBottom: 70,
         width:"50%"
     },
     signOutText:{
         textDecorationLine:"underline",
+    },
+    errorContainer:{
+        fontSize:12,
+    },
+    errorText:{
+        marginTop: 10,
+        color:"red",
+        marginBottom: 5,
     }
 });

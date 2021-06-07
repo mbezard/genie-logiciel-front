@@ -6,6 +6,7 @@ export default function SignUp(){
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
+    const [error, errorText] = useState("");
 
     function submit() {
         console.log("submit")
@@ -36,6 +37,12 @@ export default function SignUp(){
             placeholder="Confirmer le Mot de passe"
             secureTextEntry={true}
         />
+
+        <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+                {error}
+            </Text>
+        </View>
 
         <View style={styles.submitButton}>
             <Button
@@ -76,11 +83,18 @@ const styles = StyleSheet.create({
         marginVertical: 2,
     },
     submitButton:{
-        marginTop: 20,
         marginBottom: 50,
         width:"50%"
     },
     signOutText:{
         textDecorationLine:"underline",
+    },
+    errorContainer:{
+        fontSize:12,
+    },
+    errorText:{
+        marginTop: 15,
+        color:"red",
+        marginBottom: 5,
     }
 });
