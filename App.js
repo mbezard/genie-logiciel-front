@@ -1,39 +1,71 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {Link, NativeRouter, Route} from "react-router-native";
 import Home from "./src/components/pages/Home";
 import Profile from "./src/components/pages/Profile";
 import WanderMap from "./src/components/pages/WanderMap";
-import {padding} from "./src/components/utils/utils";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator, tabBarBadge } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function App() {
+    const Tab = createBottomTabNavigator();
     return (
         <SafeAreaView style={styles.mainContainer}>
-            <NativeRouter>
-                <View style={styles.container}>
-                    <View style={styles.mainView}>
-                    <Route exact path="/" component={Home}/>
-                    <Route path="/map" component={WanderMap}/>
-                    <Route path="/profile" component={Profile}/>
-                    </View>
-                    {/* Header : */}
-                    <View style={styles.navbar}>
-                        <Link to="/" underlayColor="#f0f4f7">
-                            <Text style={styles.navItem}>Home</Text>
-                        </Link>
-                        <Link to="/map" underlayColor="#f0f4f7">
-                            <Text style={styles.navItem}>Map</Text>
-                        </Link>
-                        <Link to="/profile" underlayColor="#f0f4f7">
-                            <Text style={styles.navItem}>Profile</Text>
-                        </Link>
 
-                    </View>
-
-                </View>
-            </NativeRouter>
-
-        </SafeAreaView>
+            <NavigationContainer style={styles.container}>
+                <Tab.Navigator style={styles.mainView}
+                        screenOptions={({ route }) => ({
+                            tabBarIcon: ({ focused, color, size }) => {
+                            if (route.name === 'Home') {
+                                return (
+                                <Ionicons
+                                    name={
+                                    focused
+                                        ? 'home'
+                                        : 'home-outline'
+                                    }
+                                    size={size}
+                                    color={color}
+                                />
+                                );
+                            } else if (route.name === 'Map') {
+                                return (
+                                <Ionicons
+                                    name={focused ? 'map' : 'map-outline'}
+                                    size={size}
+                                    color={color}
+                                />
+                                );
+                            } else if (route.name === 'Profile') {
+                                return (
+                                <Ionicons
+                                    name={focused ? 'person-circle' : 'person-circle-outline'}
+                                    size={size}
+                                    color={color}
+                                />
+                                );
+                            } else if (route.name === 'Proposer lieu') {
+                                return (
+                                <Ionicons
+                                    name={focused ? 'add-circle' : 'add-circle-outline'}
+                                    size={size}
+                                    color={color}
+                                />
+                                );
+                            }
+                            },
+                        })}
+                        tabBarOptions={{
+                            activeTintColor: 'tomato',
+                            inactiveTintColor: 'gray',
+                        }}>
+                    <Tab.Screen name="Home" component={Home}/>
+                    <Tab.Screen name="Map" component={WanderMap}/>
+                    <Tab.Screen name="Profile" component={Profile}/>
+                    <Tab.Screen name="Proposer lieu" component = {Profile}/>
+                </Tab.Navigator>
+            </NavigationContainer>
+        </SafeAreaView> 
     );
 }
 
@@ -50,14 +82,4 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    navbar:{
-        ...padding(4),
-        flexDirection: "row",
-        backgroundColor: "orange",
-        borderWidth: 1,
-        borderColor: "grey",
-    },
-    navItem : {
-        ...padding(4, 8, 4, 8)
-    }
 });
