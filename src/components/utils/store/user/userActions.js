@@ -31,10 +31,10 @@ export const loginAttempt = (username, password) => {
                 const token = response.data.token;
                 axios.defaults.headers.common['Authorization'] = `${token}`;
                 // NativeAsyncStorage.setItem('authJwtToken', token);
-                AsyncStorage.setItem('authJwtToken', token)
+                AsyncStorage.setItem('authJwtToken', token);
                 dispatch(getUserInfos());
             }
-        ).catch(reason => console.log("error while loging in", JSON.stringify(reason)))
+        ).catch(reason => console.log("error while loging in", reason))
     }
 }
 
