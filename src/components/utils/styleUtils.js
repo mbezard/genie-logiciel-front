@@ -1,3 +1,17 @@
+import {StyleSheet} from "react-native";
+
+const stylesUtils = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    containerCenter: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    }
+});
+
+
 export function padding(a, b, c, d) {
     return {
         paddingTop: a,
@@ -16,3 +30,5 @@ export function margin(a, b, c, d) {
         marginLeft: d ? d : (b ? b : a)
     }
 }
+
+export default stylesUtils;
