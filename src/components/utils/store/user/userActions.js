@@ -38,7 +38,7 @@ export const loginAttempt = (username, password) => {
 }
 
 export const logout = () => {
-    AsyncStorage.removeItem('authJwtToken')
+    AsyncStorage.removeItem('authJwtToken').catch();
     return {
         type: LOGOUT_USER_ACTION
     };
