@@ -3,16 +3,36 @@ import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Ionicons} from '@expo/vector-icons';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import WanderMap from "./WanderMap";
 import Home from "./Home";
 import Profile from "./Profile";
 import ProfilePage from "./ProfilePage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import {getUserInfos} from "../utils/store/user/userActions";
 
 export default function Route() {
-    const Tab = createBottomTabNavigator();
+    const dispatch = useDispatch();
     const user = useSelector(userSelector);
+    if(!user.isLogged) {
+        AsyncStorage.getItem("authJwtToken").then(data => {
+            if(data && !user.isLogged) {
+                const token = data;
+                axios.defaults.headers.common['Authorization'] = token;
+                dispatch(getUserInfos(token))
+            }
+        }).catch()
+    }
+
+
+
+
+    const Tab = createBottomTabNavigator();
+
+
+
     return(
         <SafeAreaView style={styles.mainContainer}>
             <NavigationContainer style={styles.container}>
