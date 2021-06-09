@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Text, View, Button, TextInput, StyleSheet, Alert} from "react-native";
+import {Text, View, Button, TextInput, StyleSheet, TouchableWithoutFeedback} from "react-native";
 import { Link } from "react-router-native";
 import {attemptSignin} from "../utils/requests/auth";
 import {margin, padding} from "../utils/styleUtils";
@@ -84,11 +84,11 @@ export default function SignUp({navigation}){
         <Text>
             Déjà un Compte ?
         </Text>
-        <Link to="/signIn" underlayColor="#f0f4f7">
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("SignIn")}>
             <Text style = {styles.signOutText}>
                 Se connecter
             </Text>
-        </Link>
+        </TouchableWithoutFeedback>
     </View>)
 }
 
