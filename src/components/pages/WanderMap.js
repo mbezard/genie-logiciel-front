@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {StyleSheet, Dimensions} from "react-native";
 import MapView, {PROVIDER_GOOGLE} from "react-native-maps";
-import * as Location from "expo-location";
+import {getLocationAsync} from "../utils/location";
 
 export default function WanderMap() {
     const LATITUDE_DELTA = 0.0142;
@@ -12,20 +12,8 @@ export default function WanderMap() {
         longitude: 2.348094,
     });
 
-    const getLocationAsync = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync()
-            .catch(err => console.log(err));
-        if (status !== 'granted') {
-            throw new Error("Permission to access location was denied");
-        }
-
-        let locationObject = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.High})
-            .catch(err => console.log(err));
-        setLocation({latitude: locationObject.coords.latitude, longitude: locationObject.coords.longitude});
-    }
-
     useEffect(() => {
-        getLocationAsync().catch(err => console.log(err));
+        getLocationAsync(setLocation).catch(err => console.log(err));
     }, []);
 
     return (
