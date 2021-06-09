@@ -1,8 +1,7 @@
 import React from "react";
 import {Text, View, Button, StyleSheet} from "react-native";
-import {Link} from "react-router-native";
 
-export default function VisitorHome() {
+export default function VisitorHome({navigation}) {
     return (<View style={styles.mainContainer}>
         <Text style={styles.titleText}>
             Bienvenue sur Wander !
@@ -12,18 +11,16 @@ export default function VisitorHome() {
         </Text>
         <View style={styles.choiceContainer}>
             <Text>Déjà un Compte :</Text>
-            <Link to="/signIn" underlayColor="none" style={styles.buttonLink}>
-                <Button title="Se connecter" color="orange"/>
-            </Link>
+                <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("SignIn")} />
+
         </View>
         <View style={styles.choiceContainer}>
 
             <Text>Aucun Compte :</Text>
-            <Link to="/profile" underlayColor="none" style={styles.buttonLink}>
 
-                <Button title="S'inscrire" color="orange"/>
+                <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("SignUp")}/>
 
-            </Link>
+
             <View>
 
             </View>

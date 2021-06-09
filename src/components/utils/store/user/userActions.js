@@ -30,7 +30,6 @@ export const loginAttempt = (username, password) => {
             response => {
                 const token = response.data.token;
                 axios.defaults.headers.common['Authorization'] = `${token}`;
-                // NativeAsyncStorage.setItem('authJwtToken', token);
                 AsyncStorage.setItem('authJwtToken', token);
                 dispatch(getUserInfos());
             }
@@ -39,7 +38,7 @@ export const loginAttempt = (username, password) => {
 }
 
 export const logout = () => {
-    AsyncStorage.setItem('authJwtToken')
+    AsyncStorage.removeItem('authJwtToken').catch();
     return {
         type: LOGOUT_USER_ACTION
     };
@@ -56,12 +55,11 @@ export const getUserInfos = () => {
         dispatch({
             type: GET_USER_INFO_ACTION
         });
-
         axios.get(GET_USER_INFO_URL).then(
             response => {
                 const user = response.data;
-                dispatch(setUser({...user}));
                 dispatch(logSuccess());
+                dispatch(setUser({...user}));
             }
         )
     }
