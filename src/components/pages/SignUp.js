@@ -2,9 +2,9 @@ import React, {useState} from "react";
 import {Text, View, Button, TextInput, StyleSheet, Alert} from "react-native";
 import { Link } from "react-router-native";
 import {attemptSignin} from "../utils/requests/auth";
-import {margin, padding} from "../utils/utils";
+import {margin, padding} from "../utils/styleUtils";
 
-export default function SignUp(){
+export default function SignUp({navigation}){
     const [email, setEmail] = useState("")
     const [name, setName] = useState("")
     const [pass, setPass] = useState("")
@@ -36,7 +36,7 @@ export default function SignUp(){
                 return;
             }
             setError(undefined);
-            //todo rediriger vers le login
+            navigation.navigate("SignIn")
         })
     }
 
