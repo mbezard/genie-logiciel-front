@@ -89,7 +89,8 @@ export default function WanderMap() {
                             name: "navigate",
                             color: "blue",
                         }}
-                        raised={true}/>
+                        raised={true}
+                        onPress={() => {getLocationAsync(setLocation).catch(err => {console.log(err)})}}/>
             </View>
         </View>
     );
