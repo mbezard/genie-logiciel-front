@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {StyleSheet, Dimensions} from "react-native";
+import {StyleSheet, Dimensions, View} from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import {getLocationAsync} from "../utils/location";
+import {Button} from "react-native-elements";
 
 export default function WanderMap() {
     const LATITUDE_DELTA = 0.0142;
@@ -60,23 +61,37 @@ export default function WanderMap() {
     }, []);
 
     return (
-        <MapView style={styles.map}
-                 provider={PROVIDER_GOOGLE}
-                 showsUserLocation
-                 followsUserLocation
-                 region={{
-                     latitude: location.latitude,
-                     longitude: location.longitude,
-                     latitudeDelta: LATITUDE_DELTA,
-                     longitudeDelta: LONGITUDE_DELTA
-                 }}>
-            {markers.map((marker, index) => (
-                <Marker key={index}
-                        title={marker.title}
-                        coordinate={marker.coords}
-                        description={marker.description}/>
-            ))}
-        </MapView>
+        <View>
+            <MapView style={styles.map}
+                     provider={PROVIDER_GOOGLE}
+                     showsUserLocation={true}
+                     followsUserLocation={true}
+                     region={{
+                         latitude: location.latitude,
+                         longitude: location.longitude,
+                         latitudeDelta: LATITUDE_DELTA,
+                         longitudeDelta: LONGITUDE_DELTA
+                     }}
+                     showsPointsOfInterest={false}
+                     toolbarEnabled={false}
+                     loadingEnabled={true}>
+                {markers.map((marker, index) => (
+                    <Marker key={index}
+                            title={marker.title}
+                            coordinate={marker.coords}
+                            description={marker.description}/>
+                ))}
+            </MapView>
+            <View style={styles.locationBtnContainer}>
+                <Button buttonStyle={styles.locationBtn}
+                        icon={{
+                            type: "ionicon",
+                            name: "navigate",
+                            color: "blue",
+                        }}
+                        raised={true}/>
+            </View>
+        </View>
     );
 }
 
@@ -84,5 +99,17 @@ const styles = StyleSheet.create({
     map: {
         width: Dimensions.get("window").width,
         height: Dimensions.get("window").height,
+    },
+    locationBtnContainer: {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        borderRadius: 100,
+    },
+    locationBtn: {
+        width: 50,
+        height: 50,
+        backgroundColor: "#FFFFFF",
+        borderRadius: 100,
     },
 });
