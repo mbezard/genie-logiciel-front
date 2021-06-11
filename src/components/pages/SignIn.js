@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from "react";
 import { Text, View, Button, TextInput, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { Link } from "react-router-native";
 import {useDispatch} from "react-redux";
 import {loginAttempt} from "../utils/store/user/userActions";
 

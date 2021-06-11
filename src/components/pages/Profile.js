@@ -2,9 +2,10 @@ import React, {useCallback, useState} from "react";
 import {Text, View, Button, SafeAreaView, StyleSheet, ScrollView} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
-import {logout} from "../utils/store/user/userActions";
+import {getUserInfos, logout} from "../utils/store/user/userActions";
 import styleUtils, {margin} from "../utils/styleUtils";
 import {Avatar, Chip, Divider, Icon, Input, Overlay} from "react-native-elements";
+import {modifyUser} from "../utils/requests/auth";
 
 export default function Profile({navigation}) {
     const dispatch = useDispatch();
@@ -12,21 +13,41 @@ export default function Profile({navigation}) {
     const handleLogout = useCallback(() => {
         dispatch(logout());
         navigation.navigate("Home")
+    }, [dispatch]);
+    const updateUserInfos = useCallback(() => {
+        dispatch(getUserInfos());
     }, [dispatch])
-    const [editingObject, setEditingObject] = useState({isEditing: false, label: "", setter: undefined});
+    const [editingObject, setEditingObject] = useState({isEditing: false, field: null, label: "", setter: undefined});
+    const [error, setError] = useState();
+    console.log(editingObject)
 
     const handleNameEditPress = () => {
         setEditingObject({
             isEditing: true,
             label: "Name",
-            onSubmit: undefined,
+            onSubmit: (value) => {
+                modifyUser({name: value})
+                    .then(() => {
+                        updateUserInfos();
+                        setEditingObject({isEditing: false})
+                    })
+                    .catch((error) => console.log(error))
+            },
         })
     }
     const handleMailEditPress = () => {
         setEditingObject({
             isEditing: true,
             label: "Mail",
-            onSubmit: undefined,
+            onSubmit: (value) => {
+                modifyUser({mail: value})
+                    .then(() => {
+                        handleLogout()
+                        updateUserInfos();
+                        setEditingObject({isEditing: false});
+                    })
+                    .catch((error) => console.log(error))
+            },
         })
     }
 
@@ -34,7 +55,14 @@ export default function Profile({navigation}) {
         setEditingObject({
             isEditing: true,
             label: "Password",
-            onSubmit: undefined,
+            onSubmit: (value) => {
+                modifyUser({password: value})
+                    .then(() => {
+                        updateUserInfos();
+                        setEditingObject({isEditing: false})
+                    })
+                    .catch((error) => console.log(error))
+            },
         })
     }
 
@@ -84,6 +112,7 @@ export default function Profile({navigation}) {
                             ["tag long 1", "tag2", "tag3", "verylong tag4", "extra long tag5"].map((elem, i) => (
 
                                 <Chip iconRight
+                                      key={i}
                                       title={elem}
                                       titleStyle={styles.tagTitle}
                                       containerStyle={styles.tagContainer}
@@ -105,6 +134,7 @@ export default function Profile({navigation}) {
                             ["tag long 1", "tag2", "tag3", "verylong tag4", "extra long tag5", "tag6"].map((elem, i) => (
 
                                 <Chip iconRight
+                                      key={i}
                                       title={elem}
                                       titleStyle={styles.tagTitleOff}
                                       containerStyle={styles.tagContainer}
@@ -120,19 +150,22 @@ export default function Profile({navigation}) {
                         }
                     </View>
                 </View>
-                {/*<Button title={"Se deconnecter"} color="orange" onPress={handleLogout}/>*/}
+                <Button title={"Se deconnecter"} color="orange" onPress={handleLogout}/>
             </ScrollView>
             <Overlay isVisible={editingObject.isEditing} onBackdropPress={() => setEditingObject({isEditing: false})}>
                 <View style={[styles.overlayView, styleUtils.columnFlex]}>
-                    <Text style={{fontSize:20}}>Enter a new {editingObject?.label?.toLowerCase()}</Text>
-                    <Input placeholder={editingObject?.label}/>
-                    <Button onPress={() => editingObject.setter?.()} title={"Change"}/>
+                    <Text style={{fontSize: 20}}>Enter a new {editingObject?.label?.toLowerCase()}</Text>
+                    <Input placeholder={editingObject?.label}
+                           secureTextEntry={editingObject?.label === "Password"}
+                           // textContentType={editingObject?.label === "Password" ? "password" : editingObject?.label === "Mail" ? "emailAddress" : "name"}
+                           onChangeText={(t) => setEditingObject({...editingObject, field: t})}/>
+                    <Button onPress={() => editingObject.onSubmit?.(editingObject?.field)} title={"Change"}/>
                 </View>
             </Overlay>
         </SafeAreaView>)
 }
 const styles = StyleSheet.create({
-    overlayView:{
+    overlayView: {
         width: 300,
         height: 200,
     },
