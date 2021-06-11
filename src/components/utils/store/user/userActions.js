@@ -61,6 +61,10 @@ export const getUserInfos = () => {
                 dispatch(logSuccess());
                 dispatch(setUser({...user}));
             }
-        )
+        ).catch((error) => {
+            if(parseInt(error.response?.status) === 403) {
+                AsyncStorage.removeItem('authJwtToken').catch();
+            }
+        })
     }
 }

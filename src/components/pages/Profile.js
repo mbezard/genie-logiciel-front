@@ -3,7 +3,7 @@ import {Text, View, Button, SafeAreaView, StyleSheet, ScrollView} from "react-na
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import {getUserInfos, logout} from "../utils/store/user/userActions";
-import styleUtils, {margin} from "../utils/styleUtils";
+import styleUtils, {margin, padding} from "../utils/styleUtils";
 import {Avatar, Chip, Divider, Icon, Input, Overlay} from "react-native-elements";
 import {modifyUser} from "../utils/requests/auth";
 
@@ -29,6 +29,7 @@ export default function Profile({navigation}) {
                 modifyUser({name: value})
                     .then(() => {
                         updateUserInfos();
+                        setError(undefined)
                         setEditingObject({isEditing: false})
                     })
                     .catch((error) => console.log(error))
@@ -40,13 +41,19 @@ export default function Profile({navigation}) {
             isEditing: true,
             label: "Mail",
             onSubmit: (value) => {
+                const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!reg.test(value.toLowerCase())){
+                    setError("Email au mauvais format")
+                    return;
+                }
                 modifyUser({mail: value})
                     .then(() => {
+                        setError(undefined)
                         handleLogout()
                         updateUserInfos();
                         setEditingObject({isEditing: false});
                     })
-                    .catch((error) => console.log(error))
+                    .catch(() => setError("Mail deja pris"))
             },
         })
     }
@@ -152,13 +159,17 @@ export default function Profile({navigation}) {
                 </View>
                 <Button title={"Se deconnecter"} color="orange" onPress={handleLogout}/>
             </ScrollView>
-            <Overlay isVisible={editingObject.isEditing} onBackdropPress={() => setEditingObject({isEditing: false})}>
+            <Overlay isVisible={editingObject.isEditing} onBackdropPress={() => {
+                setEditingObject({isEditing: false});
+                setError(undefined)
+            }}>
                 <View style={[styles.overlayView, styleUtils.columnFlex]}>
                     <Text style={{fontSize: 20}}>Enter a new {editingObject?.label?.toLowerCase()}</Text>
                     <Input placeholder={editingObject?.label}
                            secureTextEntry={editingObject?.label === "Password"}
-                           // textContentType={editingObject?.label === "Password" ? "password" : editingObject?.label === "Mail" ? "emailAddress" : "name"}
+                        // textContentType={editingObject?.label === "Password" ? "password" : editingObject?.label === "Mail" ? "emailAddress" : "name"}
                            onChangeText={(t) => setEditingObject({...editingObject, field: t})}/>
+                    {error && <Text style={styles.alert}>{error}</Text>}
                     <Button onPress={() => editingObject.onSubmit?.(editingObject?.field)} title={"Change"}/>
                 </View>
             </Overlay>
@@ -228,6 +239,12 @@ const styles = StyleSheet.create({
     },
     dividerSmall: {
         ...margin(0, 50, 20, 50)
+    },
+    alert: {
+        ...padding(0, 20, 0, 20),
+        ...margin(10, 5, 5, 5),
+        color: "red",
+        backgroundColor: "rgba(255,165,165,0.35)"
     }
 
 });
