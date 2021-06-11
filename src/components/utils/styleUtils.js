@@ -8,6 +8,17 @@ const stylesUtils = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+    },
+    inlineFlex: {
+        // flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    columnFlex:{
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
     }
 });
 
