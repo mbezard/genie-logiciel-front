@@ -17,60 +17,35 @@ export default function Profile({navigation}) {
     const updateUserInfos = useCallback(() => {
         dispatch(getUserInfos());
     }, [dispatch])
-    const [editingObject, setEditingObject] = useState({isEditing: false, field: null, label: "", setter: undefined});
+    const [editingField, setEditingField] = useState();
     const [error, setError] = useState();
-    console.log(editingObject)
+    const [newUser, setNewUser] = useState({});
+    // console.log(editingField)
+    // console.log(newUser)
 
-    const handleNameEditPress = () => {
-        setEditingObject({
-            isEditing: true,
-            label: "Name",
-            onSubmit: (value) => {
-                modifyUser({name: value})
-                    .then(() => {
-                        updateUserInfos();
-                        setError(undefined)
-                        setEditingObject({isEditing: false})
-                    })
-                    .catch((error) => console.log(error))
-            },
-        })
-    }
-    const handleMailEditPress = () => {
-        setEditingObject({
-            isEditing: true,
-            label: "Mail",
-            onSubmit: (value) => {
-                const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                if (!reg.test(value.toLowerCase())){
-                    setError("Email au mauvais format")
-                    return;
-                }
-                modifyUser({mail: value})
-                    .then(() => {
-                        setError(undefined)
-                        handleLogout()
-                        updateUserInfos();
-                        setEditingObject({isEditing: false});
-                    })
-                    .catch(() => setError("Mail deja pris"))
-            },
-        })
+    const handleChangeClick = () => {
+        if (newUser.mail) {
+            const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!reg.test(newUser.mail.toLowerCase())) {
+                setError("Wrong format mail")
+                return;
+            }
+        }
+        modifyUser({
+            name: newUser.name,
+            mail: newUser.mail,
+            password: newUser.password,
+            tags: newUser.tags
+        }).then(() => {
+            setError(undefined)
+            setEditingField(undefined)
+            setNewUser({})
+            updateUserInfos();
+        }).catch(() => setError("Identifiant already used"))
     }
 
-    const handlePasswordEditPress = () => {
-        setEditingObject({
-            isEditing: true,
-            label: "Password",
-            onSubmit: (value) => {
-                modifyUser({password: value})
-                    .then(() => {
-                        updateUserInfos();
-                        setEditingObject({isEditing: false})
-                    })
-                    .catch((error) => console.log(error))
-            },
-        })
+    const handleChangeText = (value) => {
+        setNewUser({[editingField?.toLowerCase()]: value})
     }
 
     return (
@@ -91,28 +66,29 @@ export default function Profile({navigation}) {
                         <Text style={styles.label}>Your name : </Text>
                         <Text style={styles.field}>{user?.name}</Text>
                         <Icon reverse raised name={"edit"} type={"font-awesome"} color={"orange"} size={15}
-                              onPress={handleNameEditPress}/>
+                              onPress={() => setEditingField("Name")}/>
                     </View>
 
                     <View style={styleUtils.inlineFlex}>
                         <Text style={styles.label}>Your mail : </Text>
                         <Text style={styles.field}>{user?.mail}</Text>
                         <Icon reverse raised name={"edit"} type={"font-awesome"} color={"orange"} size={15}
-                              onPress={handleMailEditPress}/>
+                              onPress={() => setEditingField("Mail")}/>
                     </View>
 
                     <View style={styleUtils.inlineFlex}>
                         <Text style={styles.label}>Your password : </Text>
                         <Text style={styles.field}>***</Text>
                         <Icon reverse raised name={"edit"} type={"font-awesome"} color={"orange"} size={15}
-                              onPress={handlePasswordEditPress}/>
+                              onPress={() => setEditingField("Password")}/>
                     </View>
 
                     <Divider style={styles.divider}/>
 
                     <View style={styleUtils.inlineFlex}>
                         <Text style={styles.label}>Your favorite tags : </Text>
-                        <Icon reverse raised name={"edit"} type={"font-awesome"} color={"orange"} size={15}/>
+                        <Icon reverse raised name={"edit"} type={"font-awesome"} color={"orange"} size={15}
+                              onPress={() => setEditingField("Tags")}/>
                     </View>
                     <View style={styles.tagBox}>
                         {
@@ -159,18 +135,19 @@ export default function Profile({navigation}) {
                 </View>
                 <Button title={"Se deconnecter"} color="orange" onPress={handleLogout}/>
             </ScrollView>
-            <Overlay isVisible={editingObject.isEditing} onBackdropPress={() => {
-                setEditingObject({isEditing: false});
+            <Overlay isVisible={editingField !== undefined} onBackdropPress={() => {
+                setEditingField(undefined);
+                setNewUser({});
                 setError(undefined)
             }}>
                 <View style={[styles.overlayView, styleUtils.columnFlex]}>
-                    <Text style={{fontSize: 20}}>Enter a new {editingObject?.label?.toLowerCase()}</Text>
-                    <Input placeholder={editingObject?.label}
-                           secureTextEntry={editingObject?.label === "Password"}
+                    <Text style={{fontSize: 20}}>Enter a new {editingField?.toLowerCase()}</Text>
+                    <Input placeholder={editingField}
+                           secureTextEntry={editingField === "Password"}
                         // textContentType={editingObject?.label === "Password" ? "password" : editingObject?.label === "Mail" ? "emailAddress" : "name"}
-                           onChangeText={(t) => setEditingObject({...editingObject, field: t})}/>
+                           onChangeText={handleChangeText}/>
                     {error && <Text style={styles.alert}>{error}</Text>}
-                    <Button onPress={() => editingObject.onSubmit?.(editingObject?.field)} title={"Change"}/>
+                    <Button onPress={handleChangeClick} title={"Change"}/>
                 </View>
             </Overlay>
         </SafeAreaView>)
