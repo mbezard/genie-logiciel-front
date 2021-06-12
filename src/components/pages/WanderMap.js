@@ -3,10 +3,25 @@ import {StyleSheet, Dimensions, View} from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import {getLocationAsync} from "../utils/location";
 import {Button} from "react-native-elements";
+import {useSelector} from "react-redux";
+import {userSelector} from "../utils/store/user/userSelector";
+import {getPlacesFromTags} from "../utils/requests/place";
 
 export default function WanderMap() {
+    const user = useSelector(userSelector);
+    const tags = user.tags;
     const LATITUDE_DELTA = 0.0142;
     const LONGITUDE_DELTA = 0.0102;
+    useEffect(() => {
+        getPlacesFromTags(tags).then(value => setMarkers(value.map(place => ({
+            title: place.title,
+            description: "score: " + place.score,
+            coords: {
+                latitude: place.latitude,
+                longitude: place.longitude
+            }
+        }))))
+    }, [user])
 
     const [location, setLocation] = useState({
         latitude: 48.853562,
@@ -90,7 +105,11 @@ export default function WanderMap() {
                             color: "blue",
                         }}
                         raised={true}
-                        onPress={() => {getLocationAsync(setLocation).catch(err => {console.log(err)})}}/>
+                        onPress={() => {
+                            getLocationAsync(setLocation).catch(err => {
+                                console.log(err)
+                            })
+                        }}/>
             </View>
         </View>
     );

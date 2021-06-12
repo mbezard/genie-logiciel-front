@@ -10,3 +10,5 @@ export const REMOVE_TAG_FROM_USER_URL = address + "/user/remove-tag";
 
 export const GET_ALL_TAGS_URL = address + "/tag";
 
+export const GET_PLACES_FROM_TAGS_URL = address + "/place";
+
