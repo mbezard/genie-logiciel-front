@@ -13,15 +13,15 @@ export default function SignIn({navigation}) {
     }, [dispatch])
 
     function submit() {
-        console.log("submit", email, pass)
-        logUser(email, pass)
+        logUser(email.toLowerCase(), pass)
     }
 
     return (<View style={styles.mainContainer}>
         <Text style={styles.title}>Connexion</Text>
         <TextInput
             style={styles.input}
-            autoCompleteType="email"
+            autoCompleteType={"email"}
+            textContentType={"emailAddress"}
             onChangeText={setEmail}
             value={email}
             placeholder="Adresse Mail"

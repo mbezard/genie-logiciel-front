@@ -120,13 +120,13 @@ export default function Profile({navigation}) {
                                           containerStyle={styles.tagContainer}
                                           buttonStyle={styles.tagButton}
                                           type={"outline"}
-                                          onPress={() => handleRemoveTagClick(elem.id)}
-                                          icon={{
+                                          onPress={editingField === "Tags" ? () => handleRemoveTagClick(elem.id) : undefined}
+                                          icon={editingField === "Tags" ? {
                                               name: "close",
                                               type: "font-awesome",
                                               size: 20,
                                               color: "black",
-                                          }}/>
+                                          } : undefined}/>
                                 ))
                                 :
                                 <View style={styleUtils.containerCenter}>
@@ -140,7 +140,7 @@ export default function Profile({navigation}) {
                             <Divider style={styles.dividerSmall}/>
                             <View style={styles.tagBox}>
                                 {
-                                    allTags.map((elem, i) => (
+                                    allTags.filter(tag => !user.tags.some(userTag => userTag.id === tag.id)).map((elem, i) => (
 
                                         <Chip iconRight
                                               key={i}
@@ -163,7 +163,7 @@ export default function Profile({navigation}) {
                         </>
                     }
                 </View>
-                <Button title={"Se deconnecter"} color="orange" onPress={handleLogout}/>
+                <Button title={"Logout"} color="orange" onPress={handleLogout}/>
             </ScrollView>
             <Overlay isVisible={editingField !== undefined && editingField !== "Tags"} onBackdropPress={() => {
                 setEditingField(undefined);
