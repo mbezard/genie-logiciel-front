@@ -9,6 +9,7 @@ const defaultUser = {
     name: null,
     mail: null,
     role: null,
+    tags: {},
     isLogged: false,
 }
 

@@ -1,11 +1,22 @@
 import {StyleSheet} from "react-native";
 
-const stylesUtils = StyleSheet.create({
+const styleUtils = StyleSheet.create({
     container: {
         flex: 1,
     },
     containerCenter: {
         flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    inlineFlex: {
+        // flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    columnFlex:{
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
     }
@@ -31,4 +42,4 @@ export function margin(a, b, c, d) {
     }
 }
 
-export default stylesUtils;
+export default styleUtils;

@@ -1,10 +1,9 @@
 import React, {useCallback, useState} from "react";
-import { Text, View, Button, TextInput, StyleSheet } from "react-native";
-import { Link } from "react-router-native";
+import { Text, View, Button, TextInput, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import {useDispatch} from "react-redux";
 import {loginAttempt} from "../utils/store/user/userActions";
 
-export default function SignIn() {
+export default function SignIn({navigation}) {
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
     const dispatch = useDispatch()
@@ -14,15 +13,15 @@ export default function SignIn() {
     }, [dispatch])
 
     function submit() {
-        console.log("submit", email, pass)
-        logUser(email, pass)
+        logUser(email.toLowerCase(), pass)
     }
 
     return (<View style={styles.mainContainer}>
         <Text style={styles.title}>Connexion</Text>
         <TextInput
             style={styles.input}
-            autoCompleteType="email"
+            autoCompleteType={"email"}
+            textContentType={"emailAddress"}
             onChangeText={setEmail}
             value={email}
             placeholder="Adresse Mail"
@@ -47,11 +46,11 @@ export default function SignIn() {
         <Text>
             Pas encore de Compte ?
         </Text>
-        <Link to="/signOut" underlayColor="#f0f4f7">
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("SignUp")}>
             <Text style = {styles.signOutText}>
                 Identifiez-vous
             </Text>
-        </Link>
+        </TouchableWithoutFeedback>
     </View>)
 
 
