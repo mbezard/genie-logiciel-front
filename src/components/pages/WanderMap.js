@@ -6,28 +6,18 @@ import {Button} from "react-native-elements";
 import {useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import {getPlacesFromTags} from "../utils/requests/place";
+import {getColorLabelFromScore} from "../utils/utilsFunctions";
 
 export default function WanderMap() {
     const user = useSelector(userSelector);
     const tags = user.tags;
-    const LATITUDE_DELTA = 0.0142;
-    const LONGITUDE_DELTA = 0.0102;
-    useEffect(() => {
-        getPlacesFromTags(tags).then(value => setMarkers(value.map(place => ({
-            title: place.title,
-            description: "score: " + place.score,
-            coords: {
-                latitude: place.latitude,
-                longitude: place.longitude
-            }
-        }))))
-    }, [user])
+    const LATITUDE_DELTA = 0.02;
+    const LONGITUDE_DELTA = 0.02;
 
     const [location, setLocation] = useState({
         latitude: 48.853562,
         longitude: 2.348094,
     });
-    // TODO: do not forget to delete the initial state when connected to DB
     const [markers, setMarkers] = useState([
         {
             title: "Maison de Jules Verne",
@@ -72,6 +62,25 @@ export default function WanderMap() {
     ]);
 
     useEffect(() => {
+        getPlacesFromTags(tags).then(value => {
+            const max = value.map(elem => elem.score).reduce((previousValue, currentValue) => (previousValue > currentValue ? previousValue : currentValue), 1)
+            if (value.length > 0) {
+                setMarkers(value.map(place => {
+                    return {
+                        title: place.title,
+                            description: "score: " + place.score,
+                        color: getColorLabelFromScore(place.score, max),
+                        coords: {
+                        latitude: place.latitude,
+                            longitude: place.longitude
+                    }
+                    }
+                }))
+            }
+        })
+    }, [user])
+
+    useEffect(() => {
         getLocationAsync(setLocation).catch(err => console.log(err));
     }, []);
 
@@ -91,8 +100,9 @@ export default function WanderMap() {
                      toolbarEnabled={false}
                      loadingEnabled={true}>
                 {markers.map((marker, index) => (
-                    <Marker key={index}
+                    <MapView.Marker key={index}
                             title={marker.title}
+                            pinColor={marker.color}
                             coordinate={marker.coords}
                             description={marker.description}/>
                 ))}
