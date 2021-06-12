@@ -1,5 +1,5 @@
 import axios from "axios";
-import {SIGNIN_URL, UPDATE_USER_URL} from "../Url";
+import {ADD_TAG_TO_USER_URL, REMOVE_TAG_FROM_USER_URL, SIGNIN_URL, UPDATE_USER_URL} from "../Url";
 
 export const attemptSignin = async (name, password, mail ) => {
     const data = new FormData();
@@ -18,4 +18,12 @@ export const modifyUser = async ({name, mail, password, tags}) => {
     if (password) data.append("password", password);
     if (tags) data.append("tagsAsString", JSON.stringify(tags));
     return (await axios.post(UPDATE_USER_URL, data)).data;
+}
+
+export const addTagToUser = async (tagId) => {
+    return (await axios.put(ADD_TAG_TO_USER_URL + "/" + tagId)).data;
+}
+
+export const removeTagFromUser = async (tagId) => {
+    return (await axios.delete(REMOVE_TAG_FROM_USER_URL + "/" + tagId)).data;
 }

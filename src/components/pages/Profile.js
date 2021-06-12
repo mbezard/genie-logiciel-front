@@ -1,15 +1,20 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Text, View, Button, SafeAreaView, StyleSheet, ScrollView} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import {getUserInfos, logout} from "../utils/store/user/userActions";
 import styleUtils, {margin, padding} from "../utils/styleUtils";
 import {Avatar, Chip, Divider, Icon, Input, Overlay} from "react-native-elements";
-import {modifyUser} from "../utils/requests/auth";
+import {addTagToUser, modifyUser, removeTagFromUser} from "../utils/requests/auth";
+import {getAllTags} from "../utils/requests/tags";
 
 export default function Profile({navigation}) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
+    const [allTags, setAllTags] = useState([]);
+    useEffect(() => {
+        getAllTags().then(value => setAllTags(value))
+    }, [])
     const handleLogout = useCallback(() => {
         dispatch(logout());
         navigation.navigate("Home")
@@ -46,6 +51,18 @@ export default function Profile({navigation}) {
 
     const handleChangeText = (value) => {
         setNewUser({[editingField?.toLowerCase()]: value})
+    }
+
+    function handleNewTagClick(id) {
+        addTagToUser(id).then(() => {
+            updateUserInfos();
+        })
+    }
+
+    function handleRemoveTagClick(id) {
+        removeTagFromUser(id).then(() => {
+            updateUserInfos();
+        })
     }
 
     return (
@@ -88,54 +105,67 @@ export default function Profile({navigation}) {
                     <View style={styleUtils.inlineFlex}>
                         <Text style={styles.label}>Your favorite tags : </Text>
                         <Icon reverse raised name={"edit"} type={"font-awesome"} color={"orange"} size={15}
-                              onPress={() => setEditingField("Tags")}/>
+                              onPress={() => setEditingField(prevState => (prevState !== "Tags" ? "Tags" : undefined))}/>
                     </View>
                     <View style={styles.tagBox}>
                         {
-                            ["tag long 1", "tag2", "tag3", "verylong tag4", "extra long tag5"].map((elem, i) => (
+                            user.tags?.length > 0 ?
 
-                                <Chip iconRight
-                                      key={i}
-                                      title={elem}
-                                      titleStyle={styles.tagTitle}
-                                      containerStyle={styles.tagContainer}
-                                      buttonStyle={styles.tagButton}
-                                      type={"outline"}
-                                      icon={{
-                                          name: "close",
-                                          type: "font-awesome",
-                                          size: 20,
-                                          color: "black",
-                                      }}/>
-                            ))
+                                user.tags?.map((elem, i) => (
+
+                                    <Chip iconRight
+                                          key={i}
+                                          title={elem.title}
+                                          titleStyle={styles.tagTitle}
+                                          containerStyle={styles.tagContainer}
+                                          buttonStyle={styles.tagButton}
+                                          type={"outline"}
+                                          onPress={() => handleRemoveTagClick(elem.id)}
+                                          icon={{
+                                              name: "close",
+                                              type: "font-awesome",
+                                              size: 20,
+                                              color: "black",
+                                          }}/>
+                                ))
+                                :
+                                <View style={styleUtils.containerCenter}>
+                                    <Text style={{color: "gray"}}>No favorites tags</Text>
+                                </View>
                         }
 
                     </View>
-                    <Divider style={styles.dividerSmall}/>
-                    <View style={styles.tagBox}>
-                        {
-                            ["tag long 1", "tag2", "tag3", "verylong tag4", "extra long tag5", "tag6"].map((elem, i) => (
+                    {
+                        editingField === "Tags" && <>
+                            <Divider style={styles.dividerSmall}/>
+                            <View style={styles.tagBox}>
+                                {
+                                    allTags.map((elem, i) => (
 
-                                <Chip iconRight
-                                      key={i}
-                                      title={elem}
-                                      titleStyle={styles.tagTitleOff}
-                                      containerStyle={styles.tagContainer}
-                                      buttonStyle={styles.tagButtonOff}
-                                      type={"outline"}
-                                      icon={{
-                                          name: "plus",
-                                          type: "font-awesome",
-                                          size: 20,
-                                          color: "gray",
-                                      }}/>
-                            ))
-                        }
-                    </View>
+                                        <Chip iconRight
+                                              key={i}
+                                              title={elem.title}
+                                              titleStyle={styles.tagTitleOff}
+                                              containerStyle={styles.tagContainer}
+                                              buttonStyle={styles.tagButtonOff}
+                                              onPress={() => handleNewTagClick(elem.id)}
+                                              type={"outline"}
+                                              icon={{
+                                                  name: "plus",
+                                                  type: "font-awesome",
+                                                  size: 20,
+                                                  color: "gray",
+                                              }}/>
+                                    ))
+                                }
+                            </View>
+
+                        </>
+                    }
                 </View>
                 <Button title={"Se deconnecter"} color="orange" onPress={handleLogout}/>
             </ScrollView>
-            <Overlay isVisible={editingField !== undefined} onBackdropPress={() => {
+            <Overlay isVisible={editingField !== undefined && editingField !== "Tags"} onBackdropPress={() => {
                 setEditingField(undefined);
                 setNewUser({});
                 setError(undefined)
@@ -150,8 +180,10 @@ export default function Profile({navigation}) {
                     <Button onPress={handleChangeClick} title={"Change"}/>
                 </View>
             </Overlay>
-        </SafeAreaView>)
+        </SafeAreaView>
+    )
 }
+
 const styles = StyleSheet.create({
     overlayView: {
         width: 300,

@@ -4,7 +4,9 @@ export const HOME_URL = address + "/";
 export const LOGIN_URL = address + "/login";
 export const SIGNIN_URL = address + "/user/signin";
 export const UPDATE_USER_URL = address + "/user";
-
 export const GET_USER_INFO_URL = address + "/user/get-user-info";
-export const MODIFY_USER_INFO_URL = address + "/user/modify-profile";
-export const ADD_USER_HOUSE_URL = address + "/house/add";
+export const ADD_TAG_TO_USER_URL = address + "/user/add-tag";
+export const REMOVE_TAG_FROM_USER_URL = address + "/user/remove-tag";
+
+export const GET_ALL_TAGS_URL = address + "/tag";
+
