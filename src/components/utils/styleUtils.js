@@ -1,6 +1,6 @@
 import {StyleSheet} from "react-native";
 
-const stylesUtils = StyleSheet.create({
+const styleUtils = StyleSheet.create({
     container: {
         flex: 1,
     },
@@ -42,4 +42,4 @@ export function margin(a, b, c, d) {
     }
 }
 
-export default stylesUtils;
+export default styleUtils;
