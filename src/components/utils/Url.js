@@ -1,3 +1,4 @@
+// const address = "http://localhost:8080"
 const address = "https://wander-api-mbezard.herokuapp.com"
 
 export const HOME_URL = address + "/";
