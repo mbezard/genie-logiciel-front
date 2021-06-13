@@ -10,7 +10,6 @@ import {getColorLabelFromScore} from "../utils/utilsFunctions";
 
 export default function WanderMap() {
     const user = useSelector(userSelector);
-    const tags = user.tags;
 
     const [location, setLocation] = useState({
         latitude: 48.853562,
@@ -18,54 +17,15 @@ export default function WanderMap() {
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
     });
-    const [markers, setMarkers] = useState([
-        {
-            title: "Maison de Jules Verne",
-            description: "Maison de Jules Verne de la fin du XIXe siècle avec intérieurs préservés, effets personnels et jardin d'hiver.",
-            coords: {
-                latitude: 49.887793473576096,
-                longitude: 2.301834244818648
-            }
-        },
-        {
-            title: "Gare d'Amiens",
-            description: "Gare en béton sans rien de spécial.",
-            coords: {
-                latitude: 49.89053018319148,
-                longitude: 2.3078890878191194
-            }
-        },
-        {
-            title: "Cathédrale d'Amiens",
-            description: "Vaste édifice gothique du XIIIe connu pour sa décoration et ses sculptures somptueuses, 2 tours asymétriques.",
-            coords: {
-                latitude: 49.89464659106413,
-                longitude: 2.3021637961507935
-            }
-        },
-        {
-            title: "Tour Eiffel",
-            description: "Vaste édifice gothique du XIIIe connu pour sa décoration et ses sculptures somptueuses, 2 tours asymétriques.",
-            coords: {
-                latitude: 48.85834923524321,
-                longitude: 2.294426777236882
-            }
-        },
-        {
-            title: "Big Fernand Montparnasse",
-            description: "LA RÉOUVERTURE EST ARRIVÉE ! 🔔 L'atelier est à nouveau prêt à vous accueillir sur place (en terrasse et à l'intérieur) et bien sûr on continue la vente à emporter, le clique et collecte et la livraison ! En plus le couvre-feu est repoussé jusqu'à 23h donc vous avez largement le temps de venir vous régaler.",
-            coords: {
-                latitude: 48.84281041247653,
-                longitude: 2.3265465718944665
-            }
-        }
-    ]);
+    const [markers, setMarkers] = useState([]);
 
     useEffect(() => {
-        getPlacesFromTags(tags).then(value => {
-            const max = value.map(elem => elem.score).reduce((previousValue, currentValue) => (previousValue > currentValue ? previousValue : currentValue), 1)
-            if (value.length > 0) {
-                setMarkers(value.map(place => {
+        const places = user.places;
+        if (places.length > 0) {
+            const max = places.map(elem => elem.score).reduce((previousValue, currentValue) => (previousValue > currentValue ? previousValue : currentValue), 1)
+            if (places.length > 0) {
+                setMarkers(places.map(place => {
+                    // console.log(place.score, " < " , max, " -> ", getColorLabelFromScore(place.score, max))
                     return {
                         title: place.title,
                         description: "score: " + place.score,
@@ -77,7 +37,7 @@ export default function WanderMap() {
                     }
                 }))
             }
-        })
+        }
     }, [user])
 
     useEffect(() => {
@@ -106,7 +66,7 @@ export default function WanderMap() {
                          latitudeDelta: location.latitudeDelta,
                          longitudeDelta: location.longitudeDelta,
                      }}
-                     // onRegionChange={handleRegionChange}
+                // onRegionChange={handleRegionChange}
                      showsPointsOfInterest={false}
                      toolbarEnabled={false}
                      loadingEnabled={true}>

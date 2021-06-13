@@ -70,7 +70,7 @@ export default function Home({navigation}) {
                 dispatch(addPlaces(value))
             }))
         }
-    }, [updateValue])
+    }, [location])
     console.log("location1", location)
 
     const headerList = () => (
