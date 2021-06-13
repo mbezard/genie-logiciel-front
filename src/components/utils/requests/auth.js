@@ -1,5 +1,5 @@
 import axios from "axios";
-import {ADD_TAG_TO_USER_URL, REMOVE_TAG_FROM_USER_URL, SIGNIN_URL, UPDATE_USER_URL} from "../Url";
+import {ADD_TAG_TO_USER_URL, ADD_USER_VISITED_PLACE, GET_USER_VISITED_PLACES, REMOVE_TAG_FROM_USER_URL, SIGNIN_URL, UPDATE_USER_URL} from "../Url";
 
 export const attemptSignin = async (name, password, mail ) => {
     const data = new FormData();
@@ -26,4 +26,12 @@ export const addTagToUser = async (tagId) => {
 
 export const removeTagFromUser = async (tagId) => {
     return (await axios.delete(REMOVE_TAG_FROM_USER_URL + "/" + tagId)).data;
+}
+
+export const addVisitedPlace = async (placeId) => {
+    return (await axios.post(ADD_USER_VISITED_PLACE + "/" + placeId)).data;
+}
+
+export const getVisitedPlaces = async () => {
+    return (await axios.get(GET_USER_VISITED_PLACES)).data;
 }
