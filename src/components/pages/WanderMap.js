@@ -20,12 +20,17 @@ export default function WanderMap({navigation}) {
     });
     const [markers, setMarkers] = useState([]);
     const [reachedMarker, setReachedMarker] = useState({
-        title: "Cathédrale d'Amiens",
-        description: "Vaste édifice gothique du XIIIe connu pour sa décoration et ses sculptures somptueuses, 2 tours asymétriques.",
+        id:61,
+        tags:[{id:2,title:"Musées"},{id:4,title:"Statues"}],
+        title:"Test chat",
+        address:"ici",
         coords: {
-            latitude: 49.89473670785616,
-            longitude: 2.302557044693258
-        }
+            latitude:48.85227,
+            longitude: 2.308605,
+        },
+        description:"vide",
+        url:"https://placekitten.com/200/300",
+        score:200
     });
     const [overlayVisible, setOverlayVisible] = useState(true);
 
@@ -41,13 +46,17 @@ export default function WanderMap({navigation}) {
                 setMarkers(places.map(place => {
                     // console.log(place.score, " < " , max, " -> ", getColorLabelFromScore(place.score, max))
                     return {
+                        id: place.id,
                         title: place.title,
                         description: place.description,
+                        address: place.address,
+                        url: place.url,
                         color: getColorLabelFromScore(place.score, max),
                         coords: {
                             latitude: place.latitude,
                             longitude: place.longitude
-                        }
+                        },
+                        tags: place.tags,
                     }
                 }))
             }
@@ -128,7 +137,7 @@ export default function WanderMap({navigation}) {
                 </Text>
                 <Button title={"J'en veux plus !"}
                         buttonStyle={styles.overlayBtn}
-                        onPress={() => {navigation.navigate("PlaceDetails")}}/>
+                        onPress={() => {navigation.navigate("PlaceDetails", {place: reachedMarker})}}/>
             </Overlay>
         </View>
     );

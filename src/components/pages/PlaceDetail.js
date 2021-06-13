@@ -1,7 +1,9 @@
 import React from "react";
-import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
-import { Link } from "react-router-native";
-import {Button, Image} from "react-native-elements";
+import {ActivityIndicator, Dimensions, StyleSheet, Text, View} from "react-native";
+import {Chip, Image} from "react-native-elements";
+import {useSelector} from "react-redux";
+import {userSelector} from "../utils/store/user/userSelector";
+import {margin} from "../utils/styleUtils";
 
 const mockPlace = {
     title:"Arc de triomphe",
@@ -12,32 +14,36 @@ const mockPlace = {
 }
 
 
-export default function PlaceDetail(props) {
+export default function PlaceDetail({route, navigation}) {
+    const {place} = route.params;
+
+    console.log(place);
     return (
         <View style={styles.mainContainer}>
             <Image
-                source={{uri: mockPlace.image}}
+                source={{uri: place.url}}
                 style={styles.placeImage}
                 PlaceholderContent={<ActivityIndicator/>}
             />
             <View style={styles.informationContainer}>
-                <Text style={styles.placeTitle}>{mockPlace.title}</Text>
-                <Text style={styles.placeInformation}>Adresse : {mockPlace.address}</Text>
-                <Text style={styles.placeInformation}>Avis : {mockPlace.opinion}/5</Text>
-                <Text style={styles.placeInformation}>Tags : </Text>
-                <View style={styles.tagsContainer}>
-                    {mockPlace.tags.map(tag => (<View style={styles.tagView}>
-                        <Text style={styles.tagText}>
-                            {tag}
-                        </Text>
-                    </View>))}
+                <Text style={styles.placeTitle}>{place.title}</Text>
+                <Text style={styles.placeInfo}>Description : {place.description}</Text>
+                <Text style={styles.placeInfo}>Adresse : {place.address}</Text>
+                <View>
+                    <Text style={styles.placeInfo}>Tags : </Text>
+                    <View style={styles.tagsContainer}>
+                        {place.tags.map(tag => (
+                            <Chip iconRight
+                                  key={tag.id}
+                                  title={tag.title}
+                                  titleStyle={styles.tagTitle}
+                                  containerStyle={styles.tagContainer}
+                                  buttonStyle={styles.tagButton}
+                                  type={"outline"}
+                            />
+                        ))}
+                    </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <Link style={styles.buttonLink}>
-                        <Button title="Se rendre au lieu d'interet"/>
-                    </Link>
-                </View>
-
             </View>
     </View>
     );
@@ -45,32 +51,32 @@ export default function PlaceDetail(props) {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex:1,
-        justifyContent:"flex-start",
-        alignItems:"center",
-        width: "100%",
-        height:"100%",
+        width: Dimensions.get("window").width,
+        height: Dimensions.get("window").height,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        alignItems: "center",
+        overflow: "scroll",
     },
     placeImage:{
-        width:"100%",
-        height:270,
-        borderWidth:1,
+        maxHeight: Dimensions.get("window").height / 2,
     },
     informationContainer:{
-        flex:1,
-        margin:"5%",
-        paddingVertical:10,
-        paddingHorizontal: 10,
-        width:"90%",
-        height:"57%",
-        backgroundColor:"#FFBB63AA",
+        backgroundColor:"orange",
+        width: Dimensions.get("window").width,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        alignItems: "center",
     },
     placeTitle:{
-        fontSize:28,
+        fontSize:30,
         textAlign:"center",
+        padding: 10,
         marginBottom:20,
     },
-    placeInformation:{
+    placeInfo:{
         fontSize:20,
         marginVertical:10,
 
@@ -81,26 +87,20 @@ const styles = StyleSheet.create({
        justifyContent:"center",
        flexWrap:"wrap",
     },
-    tagView:{
-        backgroundColor:"#F79E3E",
-        paddingVertical:3,
-        paddingHorizontal:15,
-        marginHorizontal:6,
-        marginVertical: 10,
-        borderRadius: 20,
-        borderWidth: 3,
-        borderColor:"#000357"
+    tagContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        flexGrow: 3,
+        ...margin(5, 7),
+        // ...padding(0, 4)
     },
-    tagText:{
-        color:"black",
-        fontSize:16,
+    tagTitle: {
+        color: "grey",
+        fontWeight: "bold"
     },
-    buttonLink:{
-        width:"70%"
+    tagButton: {
+        backgroundColor: "#d0d0d0",
+        borderColor: "#d0d0d0",
+        // ...padding(5, 20)
     },
-    buttonContainer:{
-        flex:1,
-        alignItems:"center"
-    }
-
 })
