@@ -15,7 +15,6 @@ export default function ProfilePage() {
             <Stack.Screen name="Profile" component={Profile}/>
             <Stack.Screen name="SignUp" component={SignUp}/>
             <Stack.Screen name="SignIn" component={SignIn}/>
-            <Stack.Screen name="AddPlace" component={AddPlace}/>
         </Stack.Navigator>
     )
 }
