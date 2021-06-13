@@ -1,19 +1,34 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Text, View, Button, SafeAreaView, StyleSheet, ScrollView} from "react-native";
+import {Text, View, Button, SafeAreaView, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import {getUserInfos, logout} from "../utils/store/user/userActions";
 import styleUtils, {margin, padding} from "../utils/styleUtils";
 import {Avatar, Chip, Divider, Icon, Input, Overlay} from "react-native-elements";
-import {addTagToUser, modifyUser, removeTagFromUser} from "../utils/requests/auth";
+import {addTagToUser, getVisitedPlaces, modifyUser, removeTagFromUser} from "../utils/requests/auth";
 import {getAllTags} from "../utils/requests/tags";
+
+const mockPlaces = [
+    {id: 1, title: "Arc de Triomphe",address: "Place Charles-de-Gaulle Paris", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"},
+    {id: 2, title: "Arc de Triomphe",address: "Place Charles-de-Gaulle Paris", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"},
+    {id: 3, title: "Arc de Triomphe",address: "Place Charles-de-Gaulle Paris", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"},
+    {id: 4, title: "Arc de Triomphe",address: "Place Charles-de-Gaulle Paris", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"},
+    {id: 5, title: "Arc de Triomphe",address: "Place Charles-de-Gaulle Paris", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"},
+    {id: 6, title: "Arc de Triomphe",address: "Place Charles-de-Gaulle Paris", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"},
+    {id: 7, title: "Arc de Triomphe",address: "Place Charles-de-Gaulle Paris", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"},
+]
 
 export default function Profile({navigation}) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const [allTags, setAllTags] = useState([]);
+    const [visitedPlaces, setVisitedPlace] = useState(mockPlaces);
+
     useEffect(() => {
-        getAllTags().then(value => setAllTags(value))
+        getAllTags().then(value => setAllTags(value));
+        getVisitedPlaces().then(value => {
+            return setVisitedPlace(value)
+        });
     }, [])
     const handleLogout = useCallback(() => {
         dispatch(logout());
@@ -162,6 +177,33 @@ export default function Profile({navigation}) {
 
                         </>
                     }
+                    
+                    {   (visitedPlaces.length!== 0) ?(
+                        <View>
+                            <Divider style={styles.divider}/>
+                            <View>
+                                <Text style={styles.visitedPlacesLabel}>Your last visited places : </Text>
+                            </View>
+                    
+                            <View style={styles.placesHistoryBox}>
+                            
+                            {
+                                visitedPlaces.map(place => (
+                                <TouchableOpacity
+                                    key={place.id}
+                                    style={styles.placeContainer}
+                                    activeOpacity={0.5}
+                                    onPress={() => console.log("Rediriger vers place_detail ayant pour id " + place.id)}
+                                >
+                                    <Text style={styles.placeTitle}>{place.title}</Text>
+                                </TouchableOpacity>))
+                            }
+                            </View>
+                        </View>)
+                        : <></>
+                    }
+                    
+                    
                 </View>
                 <Button title={"Logout"} color="orange" onPress={handleLogout}/>
             </ScrollView>
@@ -254,6 +296,35 @@ const styles = StyleSheet.create({
         ...margin(10, 5, 5, 5),
         color: "red",
         backgroundColor: "rgba(255,165,165,0.35)"
+    },
+    visitedPlacesLabel:{
+        textAlign:"center",
+    },
+    placesHistoryBox:{
+        width:"100%",
+        flex:1,
+        flexDirection:"row",
+        flexWrap:"wrap",
+        justifyContent:"space-around",
+        alignItems:"center",
+        marginBottom:20,
+    },
+    placeContainer:{
+        ...padding(10,5),
+        ...margin(10, 0),
+        width:"40%",
+        borderWidth: 2,
+        borderColor: "grey",
+        borderRadius: 8,
+        backgroundColor:"#E3E3E3",
+        shadowColor: 'black',
+        shadowOpacity: 0.9,
+        elevation: 5,
+    }, 
+    placeTitle:{
+        color:"#444444",
+        textAlign:"center",
+        fontSize:17,
     }
 
 });
