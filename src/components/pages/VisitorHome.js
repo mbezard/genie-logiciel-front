@@ -19,11 +19,6 @@ export default function VisitorHome({navigation}) {
             <Text>Aucun Compte :</Text>
 
                 <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("SignUp")}/>
-
-
-            <View>
-
-            </View>
         </View>
 
     </View>)
