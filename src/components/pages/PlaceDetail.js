@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Button } from "react-native";
+import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
 import { Link } from "react-router-native";
+import {Button, Image} from "react-native-elements";
 
 const mockPlace = {
     title:"Arc de triomphe",
@@ -11,32 +12,35 @@ const mockPlace = {
 }
 
 
-export default function PlaceDetail() {
-    return (<View style={styles.mainContainer}>
-        <Image
-            source= {{uri: mockPlace.image}}
-            style={styles.placeImage}
-        />
-        <View style={styles.informationContainer}>
-            <Text style={styles.placeTitle}>{mockPlace.title}</Text>
-            <Text style={styles.placeInformation}>Adresse : {mockPlace.address}</Text>
-            <Text style={styles.placeInformation}>Avis : {mockPlace.opinion}/5</Text>
-            <Text style={styles.placeInformation}>Tags : </Text>
-            <View style={styles.tagsContainer}>
-                {mockPlace.tags.map(tag => (<View style={styles.tagView}>
-                    <Text style={styles.tagText}>
-                        {tag}
-                    </Text>
-                </View>))}
+export default function PlaceDetail(props) {
+    return (
+        <View style={styles.mainContainer}>
+            <Image
+                source={{uri: mockPlace.image}}
+                style={styles.placeImage}
+                PlaceholderContent={<ActivityIndicator/>}
+            />
+            <View style={styles.informationContainer}>
+                <Text style={styles.placeTitle}>{mockPlace.title}</Text>
+                <Text style={styles.placeInformation}>Adresse : {mockPlace.address}</Text>
+                <Text style={styles.placeInformation}>Avis : {mockPlace.opinion}/5</Text>
+                <Text style={styles.placeInformation}>Tags : </Text>
+                <View style={styles.tagsContainer}>
+                    {mockPlace.tags.map(tag => (<View style={styles.tagView}>
+                        <Text style={styles.tagText}>
+                            {tag}
+                        </Text>
+                    </View>))}
+                </View>
+                <View style={styles.buttonContainer}>
+                    <Link style={styles.buttonLink}>
+                        <Button title="Se rendre au lieu d'interet"/>
+                    </Link>
+                </View>
+
             </View>
-            <View style={styles.buttonContainer}>
-                <Link style={styles.buttonLink}>
-                    <Button title="Se rendre au lieu d'interet" color="blue"/>
-                </Link>
-            </View>
-            
-        </View>
-    </View>)
+    </View>
+    );
 }
 
 const styles = StyleSheet.create({

@@ -9,7 +9,7 @@ import {getPlacesFromTags} from "../utils/requests/place";
 import {getColorLabelFromScore} from "../utils/utilsFunctions";
 import * as Location from "expo-location";
 
-export default function WanderMap() {
+export default function WanderMap({navigation}) {
     const user = useSelector(userSelector);
 
     const [location, setLocation] = useState({
@@ -19,8 +19,15 @@ export default function WanderMap() {
         longitudeDelta: 0.02,
     });
     const [markers, setMarkers] = useState([]);
-    const [reachedMarker, setReachedMarker] = useState();
-    const [overlayVisible, setOverlayVisible] = useState(false);
+    const [reachedMarker, setReachedMarker] = useState({
+        title: "Cathédrale d'Amiens",
+        description: "Vaste édifice gothique du XIIIe connu pour sa décoration et ses sculptures somptueuses, 2 tours asymétriques.",
+        coords: {
+            latitude: 49.89473670785616,
+            longitude: 2.302557044693258
+        }
+    });
+    const [overlayVisible, setOverlayVisible] = useState(true);
 
     const toggleOverlay = () => {
         setOverlayVisible(!overlayVisible);
@@ -119,7 +126,9 @@ export default function WanderMap() {
                 <Text style={styles.overlayText}>
                     Envie d'en savoir plus sur ce lieu ?
                 </Text>
-                <Button title={"J'en veux plus !"} buttonStyle={styles.overlayBtn}/>
+                <Button title={"J'en veux plus !"}
+                        buttonStyle={styles.overlayBtn}
+                        onPress={() => {navigation.navigate("PlaceDetails")}}/>
             </Overlay>
         </View>
     );
