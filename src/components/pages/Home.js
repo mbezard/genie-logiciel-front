@@ -56,22 +56,21 @@ const mockPlaces = [
 export default function Home({navigation}) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector)
-    const [places, setPlaces] = useState(mockPlaces)
-    const [location, setLocation] = useState();
     const [updateValue, setUpdateValue] = useState(0);
     const update = () => setUpdateValue((prevState => prevState + 1))
+    const [location, setLocation] = useState();
     useEffect(() => {
         getLocationAsync(setLocation).catch()
     }, [updateValue])
     useEffect(() => {
         if (location !== undefined) {
             getPlacesFromTags(user.tags, location.latitude, location.longitude).then((value => {
-                console.log("places", value)
+                // console.log("places", value)
                 dispatch(addPlaces(value))
             }))
         }
     }, [location])
-    console.log("location1", location)
+    // console.log("location1", location)
 
     const headerList = () => (
 
@@ -110,7 +109,7 @@ export default function Home({navigation}) {
                 {/*</View>*/}
             </View>
             <View style={styles.searchButtonContainer}>
-            <Button  color={"orange"} title={"Lancer la Recherche"} onPress={() => update()}/>
+                <Button color={"orange"} title={"Lancer la Recherche"} onPress={() => update()}/>
 
             </View>
             <Divider style={styles.dividerSmall}/>
@@ -120,13 +119,13 @@ export default function Home({navigation}) {
 
     return (<SafeAreaView style={styleUtils.containerCenter}>
         {
-            (user.isLogged && places && Array.isArray(user.tags)) ? (
+            (user.isLogged && user.places && Array.isArray(user.tags)) ? (
                     <View style={styles.safeAreaContainer}>
 
 
                         <VirtualizedList
                             ListHeaderComponent={headerList}
-                            data={places}
+                            data={user.places}
                             initialNumToRender={6}
                             renderItem={(place) => placeItem(place.item)}
                             keyExtractor={place => place.id.toString()}
@@ -168,7 +167,7 @@ const placeItem = (place) => {
                 <Image
                     style={styles.image}
                     source={{
-                        uri: place.image,
+                        uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg",
                     }}
                     resizeMode="contain"
                 />
@@ -177,7 +176,10 @@ const placeItem = (place) => {
                         {place.title}
                     </Text>
                     <Text style={place.addressPlace}>
-                        {place.address}
+                        {place.address || "Pas d'adresse"}
+                    </Text>
+                    <Text style={styles.tagAsText} num>
+                        {place.tags?.map((tag) => (tag.title+ ", "))}
                     </Text>
                 </View>
             </View>
@@ -187,7 +189,13 @@ const placeItem = (place) => {
 
 
 const styles = StyleSheet.create({
-    searchButtonContainer:{
+    tagAsText: {
+        flex: 1,
+        fontSize: 10,
+        color: "grey",
+        width:220
+    },
+    searchButtonContainer: {
         ...padding(0, 30)
     },
     dividerSmall: {
