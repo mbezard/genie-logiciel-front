@@ -19,14 +19,7 @@ export default function WanderMap() {
         longitudeDelta: 0.02,
     });
     const [markers, setMarkers] = useState([]);
-    const [reachedMarker, setReachedMarker] = useState({
-        title: "Cathédrale d'Amiens",
-        description: "Vaste édifice gothique du XIIIe connu pour sa décoration et ses sculptures somptueuses, 2 tours asymétriques.",
-        coords: {
-            latitude: 49.89464659106413,
-            longitude: 2.3021637961507935
-        }
-    })
+    const [reachedMarker, setReachedMarker] = useState();
     const [overlayVisible, setOverlayVisible] = useState(false);
 
     const toggleOverlay = () => {
@@ -69,7 +62,6 @@ export default function WanderMap() {
     }
 
     useEffect(() => {
-        let unsubscribe;
         Location.watchPositionAsync(
             {accuracy: Location.LocationAccuracy.High, distanceInterval: 10},
             (location) => {
@@ -79,9 +71,7 @@ export default function WanderMap() {
                     toggleOverlay();
                 }
             })
-            .then(remove => {unsubscribe = remove})
             .catch(err => console.log(err));
-        return () => unsubscribe();
     }, []);
 
     return (
@@ -122,8 +112,14 @@ export default function WanderMap() {
                             })
                         }}/>
             </View>
-            <Overlay isVisible={overlayVisible} onBackdropPress={() => toggleOverlay()}>
-                <Text>Félicitations, vous avez atteint {reachedMarker.title} !</Text>
+            <Overlay isVisible={overlayVisible} onBackdropPress={() => toggleOverlay()} overlayStyle={styles.overlay}>
+                <Text style={styles.overlayTitle}>
+                    Félicitations, vous avez atteint {reachedMarker.title} !
+                </Text>
+                <Text style={styles.overlayText}>
+                    Envie d'en savoir plus sur ce lieu ?
+                </Text>
+                <Button title={"J'en veux plus !"} buttonStyle={styles.overlayBtn}/>
             </Overlay>
         </View>
     );
@@ -146,4 +142,29 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderRadius: 100,
     },
+    overlay: {
+        width: Dimensions.get("window").width * 0.75,
+        height: Dimensions.get("window").height / 3,
+        backgroundColor: "#dbdbdb",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        alignItems: "center",
+        borderRadius: 30,
+    },
+    overlayTitle: {
+        fontSize: 30,
+        textAlign: "center",
+        paddingVertical: 10,
+    },
+    overlayText: {
+        fontSize: 20,
+        paddingVertical: 10,
+        textAlign: "center",
+    },
+    overlayBtn: {
+        backgroundColor: "orange",
+        width: Dimensions.get("window").width / 3,
+        borderRadius: 100,
+    }
 });
