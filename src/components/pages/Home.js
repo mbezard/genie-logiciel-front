@@ -84,7 +84,8 @@ export default function Home({navigation}) {
                     <Image
                         style={styles.image}
                         source={{
-                            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg",
+                            uri: place.url,
+                            // uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg",
                         }}
                         resizeMode="contain"
                     />

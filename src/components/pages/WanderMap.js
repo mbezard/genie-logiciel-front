@@ -42,7 +42,7 @@ export default function WanderMap({navigation}) {
                     // console.log(place.score, " < " , max, " -> ", getColorLabelFromScore(place.score, max))
                     return {
                         title: place.title,
-                        description: "score: " + place.score,
+                        description: place.description,
                         color: getColorLabelFromScore(place.score, max),
                         coords: {
                             latitude: place.latitude,
