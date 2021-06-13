@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {StyleSheet, Dimensions, View} from "react-native";
+import {StyleSheet, Dimensions, View, Text} from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
-import {getLocationAsync} from "../utils/location";
-import {Button} from "react-native-elements";
+import {checkMarkersProximity, getLocationAsync} from "../utils/location";
+import {Button, Overlay} from "react-native-elements";
 import {useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import {getPlacesFromTags} from "../utils/requests/place";
 import {getColorLabelFromScore} from "../utils/utilsFunctions";
+import * as Location from "expo-location";
 
 export default function WanderMap() {
     const user = useSelector(userSelector);
@@ -58,8 +59,29 @@ export default function WanderMap() {
                 latitude: 48.84281041247653,
                 longitude: 2.3265465718944665
             }
+        },
+        {
+            title: "Maison",
+            description: "Blablabla",
+            coords: {
+                latitude: 49.887955,
+                longitude: 2.313865
+            }
         }
     ]);
+    const [reachedMarker, setReachedMarker] = useState({
+        title: "Cathédrale d'Amiens",
+        description: "Vaste édifice gothique du XIIIe connu pour sa décoration et ses sculptures somptueuses, 2 tours asymétriques.",
+        coords: {
+            latitude: 49.89464659106413,
+            longitude: 2.3021637961507935
+        }
+    })
+    const [overlayVisible, setOverlayVisible] = useState(false);
+
+    const toggleOverlay = () => {
+        setOverlayVisible(!overlayVisible);
+    }
 
     useEffect(() => {
         getPlacesFromTags(tags).then(value => {
@@ -71,9 +93,9 @@ export default function WanderMap() {
                             description: "score: " + place.score,
                         color: getColorLabelFromScore(place.score, max),
                         coords: {
-                        latitude: place.latitude,
+                            latitude: place.latitude,
                             longitude: place.longitude
-                    }
+                        }
                     }
                 }))
             }
@@ -82,6 +104,22 @@ export default function WanderMap() {
 
     useEffect(() => {
         getLocationAsync(setLocation).catch(err => console.log(err));
+    }, []);
+
+    useEffect(() => {
+        let unsubscribe;
+        Location.watchPositionAsync(
+            {accuracy: Location.LocationAccuracy.High, distanceInterval: 10},
+            (location) => {
+                let marker = checkMarkersProximity(location, markers);
+                if (marker !== undefined) {
+                    setReachedMarker(marker);
+                    toggleOverlay();
+                }
+            })
+            .then(remove => {unsubscribe = remove})
+            .catch(err => console.log(err));
+        return () => unsubscribe();
     }, []);
 
     return (
@@ -121,6 +159,12 @@ export default function WanderMap() {
                             })
                         }}/>
             </View>
+            <Overlay isVisible={overlayVisible} onBackdropPress={overlayVisible}>
+                <Text>Félicitations, vous avez atteint</Text>
+                <Text style={{fontWeight: 'bold'}}> {reachedMarker.title}</Text>
+                <Text>!</Text>
+
+            </Overlay>
         </View>
     );
 }
