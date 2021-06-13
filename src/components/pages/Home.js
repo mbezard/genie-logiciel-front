@@ -70,7 +70,7 @@ export default function Home({navigation}) {
                 dispatch(addPlaces(value))
             }))
         }
-    }, [location])
+    }, [updateValue])
     console.log("location1", location)
 
     const headerList = () => (
@@ -110,7 +110,7 @@ export default function Home({navigation}) {
                 {/*</View>*/}
             </View>
             <View style={styles.searchButtonContainer}>
-            <Button  color={"orange"} title={"Lancer la Recherche"} onPress={() => console.log("recherche")}/>
+            <Button  color={"orange"} title={"Lancer la Recherche"} onPress={() => update()}/>
 
             </View>
             <Divider style={styles.dividerSmall}/>
