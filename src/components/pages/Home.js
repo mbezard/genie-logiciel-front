@@ -128,13 +128,13 @@ export default function Home({navigation}) {
                         </Text>
                         <View style={styles.choiceContainer}>
                             <Text>Déjà un Compte :</Text>
-                            <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("SignIn")}/>
+                            <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("ProfilePage", {screen: "SignIn"})}/>
 
                         </View>
                         <View style={styles.choiceContainer}>
                             <Text>Aucun Compte :</Text>
 
-                            <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("SignUp")}/>
+                            <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("ProfilePage", {screen: "SignUp"})}/>
                         </View>
                     </View>)
         }

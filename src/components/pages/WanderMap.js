@@ -137,7 +137,7 @@ export default function WanderMap({navigation}) {
                 </Text>
                 <Button title={"J'en veux plus !"}
                         buttonStyle={styles.overlayBtn}
-                        onPress={() => {navigation.navigate("PlaceDetails", {place: reachedMarker})}}/>
+                        onPress={() => {navigation.navigate("Map", {screen: "PlaceDetails", params: {place: reachedMarker}})}}/>
             </Overlay>
         </View>
     );
