@@ -11,12 +11,12 @@ import {getColorLabelFromScore} from "../utils/utilsFunctions";
 export default function WanderMap() {
     const user = useSelector(userSelector);
     const tags = user.tags;
-    const LATITUDE_DELTA = 0.02;
-    const LONGITUDE_DELTA = 0.02;
 
     const [location, setLocation] = useState({
         latitude: 48.853562,
         longitude: 2.348094,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
     });
     const [markers, setMarkers] = useState([
         {
@@ -68,12 +68,12 @@ export default function WanderMap() {
                 setMarkers(value.map(place => {
                     return {
                         title: place.title,
-                            description: "score: " + place.score,
+                        description: "score: " + place.score,
                         color: getColorLabelFromScore(place.score, max),
                         coords: {
-                        latitude: place.latitude,
+                            latitude: place.latitude,
                             longitude: place.longitude
-                    }
+                        }
                     }
                 }))
             }
@@ -84,6 +84,16 @@ export default function WanderMap() {
         getLocationAsync(setLocation).catch(err => console.log(err));
     }, []);
 
+    function handleRegionChange(region) {
+        if (region.latitudeDelta !== location.latitudeDelta) {
+            setLocation((prevLoc) => ({
+                ...prevLoc,
+                longitudeDelta: region.longitudeDelta,
+                latitudeDelta: region.latitudeDelta
+            }))
+        }
+    }
+
     return (
         <View>
             <MapView style={styles.map}
@@ -93,18 +103,19 @@ export default function WanderMap() {
                      region={{
                          latitude: location.latitude,
                          longitude: location.longitude,
-                         latitudeDelta: LATITUDE_DELTA,
-                         longitudeDelta: LONGITUDE_DELTA
+                         latitudeDelta: location.latitudeDelta,
+                         longitudeDelta: location.longitudeDelta,
                      }}
+                     // onRegionChange={handleRegionChange}
                      showsPointsOfInterest={false}
                      toolbarEnabled={false}
                      loadingEnabled={true}>
                 {markers.map((marker, index) => (
                     <MapView.Marker key={index}
-                            title={marker.title}
-                            pinColor={marker.color}
-                            coordinate={marker.coords}
-                            description={marker.description}/>
+                                    title={marker.title}
+                                    pinColor={marker.color}
+                                    coordinate={marker.coords}
+                                    description={marker.description}/>
                 ))}
             </MapView>
             <View style={styles.locationBtnContainer}>
