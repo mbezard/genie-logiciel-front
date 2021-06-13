@@ -1,4 +1,5 @@
 import {
+    ADD_PLACES_ACTION,
     GET_USER_INFO_ACTION,
     LOG_SUCCESS,
     LOGIN_USER_ATTEMPT_ACTION,
@@ -66,5 +67,12 @@ export const getUserInfos = () => {
                 AsyncStorage.removeItem('authJwtToken').catch();
             }
         })
+    }
+}
+
+export const addPlaces = (places) => {
+    return {
+        type: ADD_PLACES_ACTION,
+        payload: places
     }
 }

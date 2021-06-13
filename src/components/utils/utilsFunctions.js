@@ -12,8 +12,11 @@ export const getColorFromScore = (score, max) => {
 }
 
 export const getColorLabelFromScore = (score, max) => {
-    const colors = ["green", "orange" , "yellow"]
-    for(let i=0; i<colors.length;i++) {
-        if(score > (max - i) / colors.length) return colors[i]
+    // const colors = ["green", "orange" , "yellow"]
+    // const colors = ["green", "teal" , "linen", "orange"]
+    const colors = ["red", "linen", "orange", "yellow"]
+    for(let i=1; i<colors.length;i++) {
+        if(score > (max) * ((colors.length - i) / colors.length)) return colors[i-1]
     }
+    return colors[colors.length - 1];
 }

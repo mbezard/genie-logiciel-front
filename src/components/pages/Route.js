@@ -8,6 +8,7 @@ import {userSelector} from "../utils/store/user/userSelector";
 import WanderMap from "./WanderMap";
 import Home from "./Home";
 import Profile from "./Profile";
+import AddPlace from "./AddPlace";
 import ProfilePage from "./ProfilePage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -78,7 +79,7 @@ export default function Route() {
                     <Tab.Screen name="Home" component={Home}/>
                     <Tab.Screen name="Map" component={WanderMap}/>
                     <Tab.Screen name="ProfilePage" component={user.isLogged ? Profile : ProfilePage}/>
-                    <Tab.Screen name="Proposer lieu" component={Profile}/>
+                    <Tab.Screen name="Proposer lieu" component={AddPlace}/>
 
                 </Tab.Navigator>
 

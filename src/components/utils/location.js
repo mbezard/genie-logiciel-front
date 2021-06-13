@@ -13,7 +13,8 @@ export const getLocationAsync = async (locationSetter) => {
 
     let locationObject = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.High})
         .catch(err => console.log(err));
-    locationSetter({latitude: locationObject.coords.latitude, longitude: locationObject.coords.longitude});
+    // console.log("location", locationObject)
+    locationSetter((prevLoc) => ({...prevLoc, latitude: locationObject.coords.latitude, longitude: locationObject.coords.longitude}));
 }
 
 export const checkMarkersProximity = (location, markers) => {
