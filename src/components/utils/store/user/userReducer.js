@@ -4,21 +4,25 @@ export const LOGIN_USER_ATTEMPT_ACTION = "LOGIN_USER_ATTEMPT_ACTION";
 export const LOGOUT_USER_ACTION = "LOGOUT_USER_ACTION";
 export const GET_USER_INFO_ACTION = "GET_USER_INFO_ACTION";
 export const LOG_SUCCESS = "LOG_SUCCESS";
+export const ADD_PLACES_ACTION = "ADD_PLACES_ACTION";
 
 const defaultUser = {
     name: null,
     mail: null,
     role: null,
     tags: [],
+    places: [],
     isLogged: false,
 }
 
 export default function userReducer(state = defaultUser, action) {
     switch (action.type) {
         case SET_USER_ACTION:
-            return { ...state, ...action.payload.user};
+            return {...state, ...action.payload.user};
         case SET_USER_NAME_ACTION:
-            return { ...state, name: action.payload};
+            return {...state, name: action.payload};
+        case ADD_PLACES_ACTION:
+            return {...state, places: action.payload};
         case LOG_SUCCESS:
             return {...state, isLogged: true}
         case LOGOUT_USER_ACTION:
