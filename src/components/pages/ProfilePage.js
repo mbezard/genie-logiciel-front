@@ -4,6 +4,7 @@ import VisitorHome from "./VisitorHome";
 import {createStackNavigator} from "@react-navigation/stack";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
+import AddPlace from "./AddPlace";
 
 export default function ProfilePage() {
     const Stack = createStackNavigator();
@@ -14,6 +15,7 @@ export default function ProfilePage() {
             <Stack.Screen name="Profile" component={Profile}/>
             <Stack.Screen name="SignUp" component={SignUp}/>
             <Stack.Screen name="SignIn" component={SignIn}/>
+            <Stack.Screen name="AddPlace" component={AddPlace}/>
         </Stack.Navigator>
     )
 }
