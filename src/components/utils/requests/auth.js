@@ -33,5 +33,5 @@ export const addVisitedPlace = async (placeId) => {
 }
 
 export const getVisitedPlaces = async () => {
-    return (await axios.get(GET_USER_VISITED_PLACES + "/" + placeId)).data;
+    return (await axios.get(GET_USER_VISITED_PLACES)).data;
 }
