@@ -159,11 +159,8 @@ export default function WanderMap() {
                             })
                         }}/>
             </View>
-            <Overlay isVisible={overlayVisible} onBackdropPress={overlayVisible}>
-                <Text>Félicitations, vous avez atteint</Text>
-                <Text style={{fontWeight: 'bold'}}> {reachedMarker.title}</Text>
-                <Text>!</Text>
-
+            <Overlay isVisible={overlayVisible} onBackdropPress={() => toggleOverlay()}>
+                <Text>Félicitations, vous avez atteint {reachedMarker.title} !</Text>
             </Overlay>
         </View>
     );
