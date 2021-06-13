@@ -16,6 +16,7 @@ export default function AddPlace({navigation}) {
     const [address, setAddress] = useState("");
     const [description, setDescription] = useState("");
     const [inputTags, setTags] = useState([]);
+    const [image, setImage] = useState("");
     const [allTags, setAllTags] = useState([]);
     const [location, setLocation] = useState();
     const [error, setError] = useState("");
@@ -38,8 +39,7 @@ export default function AddPlace({navigation}) {
 
     function submit() {
         if (name !== "" && address !== "" && description !== "" && inputTags.length !== 0) {
-
-            addNewPlace(name, address, description, inputTags, location, user.mail).then(r => {
+            addNewPlace(name, address, description, inputTags, location, user.mail, image).then(r => {
                 if (r.error && r.error?.status !== 200) {
                     setError("Network Error");
                     return;
@@ -83,6 +83,13 @@ export default function AddPlace({navigation}) {
                                        onChangeText={setDescription}
                                        value={description}
                                        placeholder="Description"
+                                       multiline={true}
+                            />
+                            <Text>Photo du lieu</Text>
+                            <TextInput style={styles.descriptionInput}
+                                       onChangeText={setImage}
+                                       value={image}
+                                       placeholder="Url de l'image"
                                        multiline={true}
                             />
 

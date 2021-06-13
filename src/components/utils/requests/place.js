@@ -9,7 +9,7 @@ export const getPlacesFromTags = async (tags, latitude = null, longitude = null)
     return (await axios.post(GET_PLACES_FROM_TAGS_URL, data)).data;
 }
 
-export const addNewPlace = async (name, address, description, tags, location, authorMail ) => {
+export const addNewPlace = async (name, address, description, tags, location, authorMail, imageUrl ) => {
     const data = new FormData();
     data.append("name", name);
     data.append("address", address);
@@ -18,6 +18,8 @@ export const addNewPlace = async (name, address, description, tags, location, au
     data.append("latitude", location.latitude);
     data.append("longitude", location.longitude);
     data.append("authorMail", authorMail);
+    if(imageUrl !== "")
+        data.append("imageUrl", imageUrl)
     let error = false;
     const response = (await axios.post(ADD_PLACE_URL, data).catch(reason => error = reason.response));
     return {data: response.data, error: error}
