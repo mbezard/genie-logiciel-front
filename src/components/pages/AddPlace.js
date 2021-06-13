@@ -19,7 +19,7 @@ export default function AddPlace({navigation}) {
     const [allTags, setAllTags] = useState([]);
     const [location, setLocation] = useState();
     const [error, setError] = useState("");
-    
+
     useEffect(() => {
         getAllTags().then(value => setAllTags(value));
         getLocationAsync(setLocation).catch(err => console.log(err));
@@ -33,12 +33,12 @@ export default function AddPlace({navigation}) {
     function handleRemoveTagClick(id) {
         const newTags = inputTags.filter(tag => tag.id !== id);
         setTags(newTags);
-    }    
-      
+    }
+
 
     function submit(){
         if(name !== "" && address !== "" && description !== "" && inputTags.length !== 0){
-            
+
             addNewPlace(name, address, description, inputTags, location, user.mail).then(r => {
                 if(r.error && r.error?.status !== 200) {
                     setError("Network Error");
@@ -61,7 +61,7 @@ export default function AddPlace({navigation}) {
             <ScrollView>
             <View style={styles.subContainer}>
                 <Text style={styles.title}>Ajouter un lieu</Text>
-                
+
                 <Text>Nom</Text>
                 <TextInput style={styles.input}
                     onChangeText={setName}
@@ -106,7 +106,7 @@ export default function AddPlace({navigation}) {
                         ))
                     :
                     <View style={styleUtils.containerCenter}>
-                        <Text style={{color: "gray"}}>No favorites tags</Text>
+                        <Text style={{color: "gray"}}>No tags selected</Text>
                     </View>
                 }
                 </View>
@@ -134,6 +134,7 @@ export default function AddPlace({navigation}) {
                 {error !== "" ? <View><Text style={styles.error}>{error}</Text></View> : <></>}
                 <View style={styles.submitButton}>
                     <Button
+                        style={{marginBottom:20}}
                     title="Envoyer le lieu"
                     onPress={submit}
                     color="orange"
@@ -149,7 +150,7 @@ export default function AddPlace({navigation}) {
                     <View style={styles.choiceContainer}>
                         <Text>Déjà un Compte :</Text>
                         <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("SignIn")} />
-    
+
                     </View>
                     <View style={styles.choiceContainer}>
                         <Text>Aucun Compte :</Text>

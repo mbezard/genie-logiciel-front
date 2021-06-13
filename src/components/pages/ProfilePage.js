@@ -10,7 +10,9 @@ export default function ProfilePage() {
     const Stack = createStackNavigator();
 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+        }}>
             <Stack.Screen name="VisitorHome" component={VisitorHome}/>
             <Stack.Screen name="Profile" component={Profile}/>
             <Stack.Screen name="SignUp" component={SignUp}/>
