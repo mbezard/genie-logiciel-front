@@ -1,5 +1,13 @@
 import axios from "axios";
-import {ADD_PLACE_URL} from "../Url";
+import {ADD_PLACE_URL, GET_PLACES_FROM_TAGS_URL} from "../Url";
+
+export const getPlacesFromTags = async (tags, latitude = null, longitude = null) => {
+    const data = new FormData();
+    data.append("tagsAsString", JSON.stringify(tags))
+    if(latitude != null) data.append("latitude", latitude);
+    if(longitude != null) data.append("longitude", longitude);
+    return (await axios.post(GET_PLACES_FROM_TAGS_URL, data)).data;
+}
 
 export const addNewPlace = async (nom, adresse, inputTags ) => {
     const data = new FormData();

@@ -7,6 +7,7 @@ import styleUtils, {margin, padding} from "../utils/styleUtils";
 import {Avatar, Chip, Divider, Icon, Input, Overlay} from "react-native-elements";
 import {addTagToUser, modifyUser, removeTagFromUser} from "../utils/requests/auth";
 import {getAllTags} from "../utils/requests/tags";
+import axios from "axios";
 
 export default function Profile({navigation}) {
     const dispatch = useDispatch();
@@ -41,7 +42,10 @@ export default function Profile({navigation}) {
             mail: newUser.mail,
             password: newUser.password,
             tags: newUser.tags
-        }).then(() => {
+        }).then((data) => {
+            if(data && data.startsWith("Bearer")) {
+                axios.defaults.headers.common['Authorization'] = data
+            }
             setError(undefined)
             setEditingField(undefined)
             setNewUser({})
@@ -70,7 +74,7 @@ export default function Profile({navigation}) {
             <ScrollView>
 
                 <View style={[styles.header]}>
-                    <Text style={styles.headerTitle}>Votre profile</Text>
+                    <Text style={styles.headerTitle}>Your profile</Text>
                 </View>
                 <Avatar containerStyle={styles.avatar}
                     // title={"PP"}
@@ -130,7 +134,7 @@ export default function Profile({navigation}) {
                                 ))
                                 :
                                 <View style={styleUtils.containerCenter}>
-                                    <Text style={{color: "gray"}}>No favorites tags</Text>
+                                    <Text style={{color: "gray"}}>No favorite tags</Text>
                                 </View>
                         }
 
