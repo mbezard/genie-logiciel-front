@@ -31,7 +31,8 @@ export default function WanderMap({navigation}) {
         description:"vide",
         url:"https://placekitten.com/200/300",
         score:200
-    });
+    }
+    );
     const [overlayVisible, setOverlayVisible] = useState(true);
 
     const toggleOverlay = () => {
@@ -81,6 +82,7 @@ export default function WanderMap({navigation}) {
         Location.watchPositionAsync(
             {accuracy: Location.LocationAccuracy.High, distanceInterval: 10},
             (location) => {
+                // console.log("markers to check", markers)
                 let marker = checkMarkersProximity(location, markers);
                 if (marker !== undefined) {
                     setReachedMarker(marker);
@@ -88,7 +90,7 @@ export default function WanderMap({navigation}) {
                 }
             })
             .catch(err => console.log(err));
-    }, []);
+    }, [markers]);
 
     return (
         <View>
@@ -137,7 +139,7 @@ export default function WanderMap({navigation}) {
                 </Text>
                 <Button title={"J'en veux plus !"}
                         buttonStyle={styles.overlayBtn}
-                        onPress={() => {navigation.navigate("PlaceDetails", {place: reachedMarker})}}/>
+                        onPress={() => {navigation.navigate("Map", {screen: "PlaceDetails", params: {place: reachedMarker}})}}/>
             </Overlay>
         </View>
     );

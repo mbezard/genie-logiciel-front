@@ -79,7 +79,7 @@ export default function Home({navigation}) {
     const placeItem = (place) => {
         return (
             <TouchableOpacity activeOpacity={0.5} style={styles.placeButton}
-                              onPress={() => console.log("go to page place details with id=" + place.id)}>
+                              onPress={() => navigation.navigate("PlaceDetails", {place: place})}>
                 <View style={styles.placeContainer}>
                     <Image
                         style={styles.image}
@@ -96,7 +96,7 @@ export default function Home({navigation}) {
                         <Text style={place.addressPlace}>
                             {place.address || "Pas d'adresse"}
                         </Text>
-                        <Text style={styles.tagAsText} num>
+                        <Text style={styles.tagAsText}>
                             {place.tags?.map((tag) => (tag.title + ", "))}
                         </Text>
                     </View>
@@ -128,13 +128,13 @@ export default function Home({navigation}) {
                         </Text>
                         <View style={styles.choiceContainer}>
                             <Text>Déjà un Compte :</Text>
-                            <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("SignIn")}/>
+                            <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("ProfilePage", {screen: "SignIn"})}/>
 
                         </View>
                         <View style={styles.choiceContainer}>
                             <Text>Aucun Compte :</Text>
 
-                            <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("SignUp")}/>
+                            <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("ProfilePage", {screen: "SignUp"})}/>
                         </View>
                     </View>)
         }

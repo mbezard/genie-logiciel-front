@@ -1,9 +1,8 @@
 import React from "react";
 import {ActivityIndicator, Dimensions, StyleSheet, Text, View} from "react-native";
 import {Chip, Image} from "react-native-elements";
-import {useSelector} from "react-redux";
-import {userSelector} from "../utils/store/user/userSelector";
 import {margin} from "../utils/styleUtils";
+import testImg from "../../photo-85125609-024.jpg";
 
 const mockPlace = {
     title:"Arc de triomphe",
@@ -17,20 +16,21 @@ const mockPlace = {
 export default function PlaceDetail({route, navigation}) {
     const {place} = route.params;
 
-    console.log(place);
+    // console.log(place);
     return (
         <View style={styles.mainContainer}>
             <Image
                 source={{uri: place.url}}
+                // source={testImg}
                 style={styles.placeImage}
                 PlaceholderContent={<ActivityIndicator/>}
             />
             <View style={styles.informationContainer}>
                 <Text style={styles.placeTitle}>{place.title}</Text>
-                <Text style={styles.placeInfo}>Description : {place.description}</Text>
-                <Text style={styles.placeInfo}>Adresse : {place.address}</Text>
-                <View>
-                    <Text style={styles.placeInfo}>Tags : </Text>
+                <View style={styles.placeInfo}><Text style={styles.placeText}>Description : {"\n"}{place.description}</Text></View>
+                <View style={styles.placeInfo}><Text style={styles.placeText}>Adresse : {"\n"}{place.address}</Text></View>
+                <View style={styles.placeInfo}>
+                    <Text style={styles.placeText}>Tags : </Text>
                     <View style={styles.tagsContainer}>
                         {place.tags.map(tag => (
                             <Chip iconRight
@@ -55,31 +55,43 @@ const styles = StyleSheet.create({
         height: Dimensions.get("window").height,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-around",
+        justifyContent: "flex-start",
         alignItems: "center",
         overflow: "scroll",
     },
     placeImage:{
-        maxHeight: Dimensions.get("window").height / 2,
+        // maxHeight: Dimensions.get("window").height / 2,
+        width: 200,
+        height: 300,
     },
     informationContainer:{
         backgroundColor:"orange",
         width: Dimensions.get("window").width,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-around",
+        justifyContent: "flex-start",
         alignItems: "center",
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 30,
     },
     placeTitle:{
-        fontSize:30,
+        fontSize:40,
         textAlign:"center",
         padding: 10,
-        marginBottom:20,
+        marginBottom: 30,
     },
     placeInfo:{
-        fontSize:20,
-        marginVertical:10,
-
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        marginBottom: 25,
+        backgroundColor: "#FFFFFF",
+        borderRadius: 50,
+        width: Dimensions.get("window").width * 0.85,
+    },
+    placeText: {
+        fontSize:18,
     },
     tagsContainer:{
        flex:1,
