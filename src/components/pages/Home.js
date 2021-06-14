@@ -79,7 +79,7 @@ export default function Home({navigation}) {
     const placeItem = (place) => {
         return (
             <TouchableOpacity activeOpacity={0.5} style={styles.placeButton}
-                              onPress={() => navigation.navigate("PlaceDetails", {place: place})}>
+                              onPress={() => {navigation.navigate("Map", {screen: "PlaceDetails", params: {place: place}})}}>
                 <View style={styles.placeContainer}>
                     <Image
                         style={styles.image}
