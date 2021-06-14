@@ -31,9 +31,8 @@ export default function WanderMap({navigation}) {
         description:"vide",
         url:"https://placekitten.com/200/300",
         score:200
-    }
-    );
-    const [overlayVisible, setOverlayVisible] = useState(true);
+    });
+    const [overlayVisible, setOverlayVisible] = useState(false);
 
     const toggleOverlay = () => {
         setOverlayVisible(!overlayVisible);
