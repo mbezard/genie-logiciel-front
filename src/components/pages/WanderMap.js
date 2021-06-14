@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {StyleSheet, Dimensions, View} from "react-native";
+import {StyleSheet, Dimensions, View, Text} from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
-import {getLocationAsync} from "../utils/location";
-import {Button} from "react-native-elements";
+import {checkMarkersProximity, getLocationAsync} from "../utils/location";
+import {Button, Overlay} from "react-native-elements";
 import {useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import {getPlacesFromTags} from "../utils/requests/place";
 import {getColorLabelFromScore} from "../utils/utilsFunctions";
+import * as Location from "expo-location";
 
-export default function WanderMap() {
+export default function WanderMap({navigation}) {
     const user = useSelector(userSelector);
 
     const [location, setLocation] = useState({
@@ -18,6 +19,24 @@ export default function WanderMap() {
         longitudeDelta: 0.02,
     });
     const [markers, setMarkers] = useState([]);
+    const [reachedMarker, setReachedMarker] = useState({
+        id:61,
+        tags:[{id:2,title:"Musées"},{id:4,title:"Statues"}],
+        title:"Test chat",
+        address:"ici",
+        coords: {
+            latitude:48.85227,
+            longitude: 2.308605,
+        },
+        description:"vide",
+        url:"https://placekitten.com/200/300",
+        score:200
+    });
+    const [overlayVisible, setOverlayVisible] = useState(false);
+
+    const toggleOverlay = () => {
+        setOverlayVisible(!overlayVisible);
+    }
 
     useEffect(() => {
         const places = user.places;
@@ -27,13 +46,17 @@ export default function WanderMap() {
                 setMarkers(places.map(place => {
                     // console.log(place.score, " < " , max, " -> ", getColorLabelFromScore(place.score, max))
                     return {
+                        id: place.id,
                         title: place.title,
-                        description: "score: " + place.score,
+                        description: place.description,
+                        address: place.address,
+                        url: place.url,
                         color: getColorLabelFromScore(place.score, max),
                         coords: {
                             latitude: place.latitude,
                             longitude: place.longitude
-                        }
+                        },
+                        tags: place.tags,
                     }
                 }))
             }
@@ -53,6 +76,20 @@ export default function WanderMap() {
             }))
         }
     }
+
+    useEffect(() => {
+        Location.watchPositionAsync(
+            {accuracy: Location.LocationAccuracy.High, distanceInterval: 10},
+            (location) => {
+                // console.log("markers to check", markers)
+                let marker = checkMarkersProximity(location, markers);
+                if (marker !== undefined) {
+                    setReachedMarker(marker);
+                    toggleOverlay();
+                }
+            })
+            .catch(err => console.log(err));
+    }, [markers]);
 
     return (
         <View>
@@ -92,6 +129,17 @@ export default function WanderMap() {
                             })
                         }}/>
             </View>
+            <Overlay isVisible={overlayVisible} onBackdropPress={() => toggleOverlay()} overlayStyle={styles.overlay}>
+                <Text style={styles.overlayTitle}>
+                    Félicitations, vous avez atteint {reachedMarker.title} !
+                </Text>
+                <Text style={styles.overlayText}>
+                    Envie d'en savoir plus sur ce lieu ?
+                </Text>
+                <Button title={"J'en veux plus !"}
+                        buttonStyle={styles.overlayBtn}
+                        onPress={() => {navigation.navigate("Map", {screen: "PlaceDetails", params: {place: reachedMarker}})}}/>
+            </Overlay>
         </View>
     );
 }
@@ -113,4 +161,29 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderRadius: 100,
     },
+    overlay: {
+        width: Dimensions.get("window").width * 0.75,
+        height: Dimensions.get("window").height / 3,
+        backgroundColor: "#dbdbdb",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        alignItems: "center",
+        borderRadius: 30,
+    },
+    overlayTitle: {
+        fontSize: 30,
+        textAlign: "center",
+        paddingVertical: 10,
+    },
+    overlayText: {
+        fontSize: 20,
+        paddingVertical: 10,
+        textAlign: "center",
+    },
+    overlayBtn: {
+        backgroundColor: "orange",
+        width: Dimensions.get("window").width / 3,
+        borderRadius: 100,
+    }
 });

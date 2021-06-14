@@ -13,6 +13,7 @@ import ProfilePage from "./ProfilePage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import {getUserInfos} from "../utils/store/user/userActions";
+import MapRouter from "./MapRouter";
 
 export default function Route() {
     const dispatch = useDispatch();
@@ -77,16 +78,13 @@ export default function Route() {
                                }}>
 
                     <Tab.Screen name="Home" component={Home}/>
-                    <Tab.Screen name="Map" component={WanderMap}/>
+                    <Tab.Screen name="Map" component={MapRouter}/>
                     <Tab.Screen name="ProfilePage" component={user.isLogged ? Profile : ProfilePage}/>
                     <Tab.Screen name="Proposer lieu" component={AddPlace}/>
-
                 </Tab.Navigator>
-
             </NavigationContainer>
-
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {StyleSheet, Text, View, Image, SafeAreaView, VirtualizedList, TouchableOpacity, Button} from "react-native";
-import {Avatar, Chip, Divider, Icon} from "react-native-elements"
+import {Chip, Divider, Icon} from "react-native-elements"
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "../utils/store/user/userSelector";
 import styleUtils, {margin, padding} from "../utils/styleUtils";
@@ -8,70 +8,25 @@ import {getLocationAsync} from "../utils/location";
 import {getPlacesFromTags} from "../utils/requests/place";
 import {addPlaces} from "../utils/store/user/userActions";
 
-const mockPlaces = [
-    {
-        id: 1,
-        title: "Arc de Triomphe",
-        address: "Place Charles-de-Gaulle Paris",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"
-    },
-    {
-        id: 2,
-        title: "Arc de Triomphe",
-        address: "Place Charles-de-Gaulle Paris",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"
-    },
-    {
-        id: 3,
-        title: "Arc de Triomphe",
-        address: "Place Charles-de-Gaulle Paris",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"
-    },
-    {
-        id: 4,
-        title: "Arc de Triomphe",
-        address: "Place Charles-de-Gaulle Paris",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"
-    },
-    {
-        id: 5,
-        title: "Arc de Triomphe",
-        address: "Place Charles-de-Gaulle Paris",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"
-    },
-    {
-        id: 6,
-        title: "Arc de Triomphe",
-        address: "Place Charles-de-Gaulle Paris",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"
-    },
-    {
-        id: 7,
-        title: "Arc de Triomphe",
-        address: "Place Charles-de-Gaulle Paris",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg"
-    },
-]
 
 export default function Home({navigation}) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector)
-    const [places, setPlaces] = useState(mockPlaces)
-    const [location, setLocation] = useState();
     const [updateValue, setUpdateValue] = useState(0);
     const update = () => setUpdateValue((prevState => prevState + 1))
+    const [location, setLocation] = useState();
     useEffect(() => {
         getLocationAsync(setLocation).catch()
     }, [updateValue])
     useEffect(() => {
         if (location !== undefined) {
             getPlacesFromTags(user.tags, location.latitude, location.longitude).then((value => {
-                console.log("places", value)
+                // console.log("places", value)
                 dispatch(addPlaces(value))
             }))
         }
     }, [location])
-    console.log("location1", location)
+    // console.log("location1", location)
 
     const headerList = () => (
 
@@ -94,7 +49,7 @@ export default function Home({navigation}) {
 
             <View style={styles.tagsContainer}>
 
-                {user.tags.map((tag, i) => (
+                {user.tags.map((tag) => (
                     <Chip iconRight
                           key={tag.id}
                           title={tag.title}
@@ -110,7 +65,7 @@ export default function Home({navigation}) {
                 {/*</View>*/}
             </View>
             <View style={styles.searchButtonContainer}>
-            <Button  color={"orange"} title={"Lancer la Recherche"} onPress={() => update()}/>
+                <Button color={"orange"} title={"Lancer la Recherche"} onPress={() => update()}/>
 
             </View>
             <Divider style={styles.dividerSmall}/>
@@ -118,22 +73,51 @@ export default function Home({navigation}) {
 
     )
 
+
+    const getItem = (data, index) => data[index]
+
+    const placeItem = (place) => {
+        return (
+            <TouchableOpacity activeOpacity={0.5} style={styles.placeButton}
+                              onPress={() => navigation.navigate("PlaceDetails", {place: place})}>
+                <View style={styles.placeContainer}>
+                    <Image
+                        style={styles.image}
+                        source={{
+                            uri: place.url,
+                            // uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/420px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg",
+                        }}
+                        resizeMode="contain"
+                    />
+                    <View>
+                        <Text style={styles.titlePlace}>
+                            {place.title}
+                        </Text>
+                        <Text style={place.addressPlace}>
+                            {place.address || "Pas d'adresse"}
+                        </Text>
+                        <Text style={styles.tagAsText}>
+                            {place.tags?.map((tag) => (tag.title + ", "))}
+                        </Text>
+                    </View>
+                </View>
+
+            </TouchableOpacity>)
+    }
     return (<SafeAreaView style={styleUtils.containerCenter}>
         {
-            (user.isLogged && places && Array.isArray(user.tags)) ? (
+            (user.isLogged && user.places && Array.isArray(user.tags)) ? (
                     <View style={styles.safeAreaContainer}>
-
 
                         <VirtualizedList
                             ListHeaderComponent={headerList}
-                            data={places}
+                            data={user.places}
                             initialNumToRender={6}
                             renderItem={(place) => placeItem(place.item)}
                             keyExtractor={place => place.id.toString()}
                             getItemCount={(data) => data.length}
                             getItem={getItem}
                         />
-
 
                     </View>
                 )
@@ -144,50 +128,27 @@ export default function Home({navigation}) {
                         </Text>
                         <View style={styles.choiceContainer}>
                             <Text>Déjà un Compte :</Text>
-                            <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("SignIn")}/>
+                            <Button title="Se connecter" color="orange" onPress={() => navigation.navigate("ProfilePage", {screen: "SignIn"})}/>
 
                         </View>
                         <View style={styles.choiceContainer}>
                             <Text>Aucun Compte :</Text>
 
-                            <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("SignUp")}/>
+                            <Button title="S'inscrire" color="orange" onPress={() => navigation.navigate("ProfilePage", {screen: "SignUp"})}/>
                         </View>
                     </View>)
         }
     </SafeAreaView>)
+
 }
-
-const getItem = (data, index) => data[index]
-
-const placeItem = (place) => {
-
-    return (
-        <TouchableOpacity activeOpacity={0.5} style={styles.placeButton}
-                          onPress={() => console.log("go to page place details with id=" + place.id)}>
-            <View style={styles.placeContainer}>
-                <Image
-                    style={styles.image}
-                    source={{
-                        uri: place.image,
-                    }}
-                    resizeMode="contain"
-                />
-                <View>
-                    <Text style={styles.titlePlace}>
-                        {place.title}
-                    </Text>
-                    <Text style={place.addressPlace}>
-                        {place.address}
-                    </Text>
-                </View>
-            </View>
-
-        </TouchableOpacity>)
-}
-
-
 const styles = StyleSheet.create({
-    searchButtonContainer:{
+    tagAsText: {
+        flex: 1,
+        fontSize: 10,
+        color: "grey",
+        width: 220
+    },
+    searchButtonContainer: {
         ...padding(0, 30)
     },
     dividerSmall: {
